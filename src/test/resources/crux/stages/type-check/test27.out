@@ -1,0 +1,13 @@
+Crux Program has no type errors.
+
+fib(int a) {
+  if (/*bool*/ (/*int*/ a <= /*int*/ 0)) {
+    return /*int*/ 1;
+  } else {
+  }
+  return /*int*/ (fib(/*int*/ (/*int*/ a - /*int*/ 1)) + fib(/*int*/ (/*int*/ a - /*int*/ 2)));
+}
+main() {
+  printInt(fib(/*int*/ 5));
+}
+

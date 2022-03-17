@@ -1,0 +1,8 @@
+Crux Program has no type errors.
+
+int addi;
+main() {
+  /*int*/ addi = readInt();
+  printInt(/*int*/ addi);
+}
+

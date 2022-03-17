@@ -1,0 +1,8 @@
+
+foo() {
+  printInt(5);
+}
+main() {
+  foo();
+}
+

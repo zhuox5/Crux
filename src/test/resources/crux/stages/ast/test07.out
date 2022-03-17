@@ -1,0 +1,7 @@
+
+main() {
+  a;
+  a = 42;
+  printInt(a);
+}
+

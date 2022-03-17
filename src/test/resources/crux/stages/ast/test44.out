@@ -1,0 +1,20 @@
+
+main() {
+  a;
+  b;
+  for(a = 0;(a < 3);a = (a + 1)) {
+    if (true) {
+      if (true) {
+        for(b = 0;(b < 3);b = (b + 1)) {
+          printInt(5);
+        }
+      } else {
+        printInt(5);
+      }
+    } else {
+    }
+    printInt(5);
+  }
+  printInt(5);
+}
+

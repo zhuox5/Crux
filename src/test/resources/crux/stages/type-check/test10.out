@@ -1,0 +1,8 @@
+Crux Program has no type errors.
+
+array[3,int] x;
+main() {
+  /*int*/ (/*array[3,int]*/ x)[/*int*/ 1] = /*int*/ 42;
+  printInt(/*int*/ (/*array[3,int]*/ x)[/*int*/ 1]);
+}
+

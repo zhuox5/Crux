@@ -1,0 +1,43 @@
+Crux Program has no type errors.
+
+main() {
+  printBool(/*bool*/ (/*bool*/ (/*int*/ 3 < /*int*/ 5) && /*bool*/ (/*int*/ 4 > /*int*/ 2)));
+  println();
+  printBool(/*bool*/ (/*bool*/ (/*bool*/ (/*int*/ 3 < /*int*/ 5) && /*bool*/ (/*int*/ 2 < /*int*/ 1)) || /*bool*/ (/*int*/ 1 < /*int*/ 2)));
+  println();
+  printBool(/*bool*/ (/*bool*/ (/*int*/ (/*int*/ 1 + /*int*/ 2) < /*int*/ 4) && /*bool*/ (/*int*/ 2 > /*int*/ 1)));
+  println();
+  printBool(/*bool*/ (/*bool*/ (/*bool*/ false && /*bool*/ false) || /*bool*/ false));
+  println();
+  printBool(/*bool*/ (/*bool*/ (/*bool*/ false && /*bool*/ false) || /*bool*/ true));
+  println();
+  printBool(/*bool*/ (/*bool*/ (/*bool*/ false && /*bool*/ true) || /*bool*/ false));
+  println();
+  printBool(/*bool*/ (/*bool*/ (/*bool*/ false && /*bool*/ true) || /*bool*/ true));
+  println();
+  printBool(/*bool*/ (/*bool*/ (/*bool*/ true && /*bool*/ false) || /*bool*/ false));
+  println();
+  printBool(/*bool*/ (/*bool*/ (/*bool*/ true && /*bool*/ false) || /*bool*/ true));
+  println();
+  printBool(/*bool*/ (/*bool*/ (/*bool*/ true && /*bool*/ true) || /*bool*/ false));
+  println();
+  printBool(/*bool*/ (/*bool*/ (/*bool*/ true && /*bool*/ true) || /*bool*/ true));
+  println();
+  printBool(/*bool*/ (/*bool*/ false || /*bool*/ (/*bool*/ false && /*bool*/ false)));
+  println();
+  printBool(/*bool*/ (/*bool*/ false || /*bool*/ (/*bool*/ false && /*bool*/ true)));
+  println();
+  printBool(/*bool*/ (/*bool*/ false || /*bool*/ (/*bool*/ true && /*bool*/ false)));
+  println();
+  printBool(/*bool*/ (/*bool*/ false || /*bool*/ (/*bool*/ true && /*bool*/ true)));
+  println();
+  printBool(/*bool*/ (/*bool*/ true || /*bool*/ (/*bool*/ false && /*bool*/ false)));
+  println();
+  printBool(/*bool*/ (/*bool*/ true || /*bool*/ (/*bool*/ false && /*bool*/ true)));
+  println();
+  printBool(/*bool*/ (/*bool*/ true || /*bool*/ (/*bool*/ true && /*bool*/ false)));
+  println();
+  printBool(/*bool*/ (/*bool*/ true || /*bool*/ (/*bool*/ true && /*bool*/ true)));
+  println();
+}
+

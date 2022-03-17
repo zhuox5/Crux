@@ -1,0 +1,10 @@
+Crux Program has no type errors.
+
+main() {
+  if (/*bool*/ false) {
+    printInt(/*int*/ 1);
+  } else {
+  }
+  printInt(/*int*/ (/*int*/ 0 - /*int*/ 1));
+}
+

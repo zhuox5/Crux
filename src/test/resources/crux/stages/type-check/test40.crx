@@ -1,0 +1,26 @@
+// test comparisons
+
+void test(int a, int b) {
+  printBool(a >= b);
+  println();
+  printBool(a <= b);
+  println();
+  printBool(a != b);
+  println();
+  printBool(a == b);
+  println();
+  printBool(a < b);
+  println();
+  printBool(a > b);
+  println();
+}
+
+void main() {
+  int i;
+  int j;
+  for(i = 0; i <= 4; i = i + 1) {
+   for(j = 0; j <= 4; j = j + 1) {
+       test(i, j);
+   }
+  }
+}

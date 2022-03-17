@@ -1,0 +1,28 @@
+// test array
+
+int x[5];
+  
+void main() {
+  int canary_begin;
+  int canary_end;
+  int outer;
+  int inner;
+  canary_begin = 0;
+  canary_end = 0;
+
+  for(outer = 4; outer >= 0; outer = outer - 1) {
+    for(inner = 2; inner >= 0; inner = inner - 1) {
+       x[outer] = inner * 1000 + outer * 100 + 99;
+    }
+  }
+
+  for(outer = 0; outer < 5; outer = outer + 1) {
+    for(inner = 0; inner < 3; inner = inner + 1) {
+       printInt(x[outer]);
+     }
+     println();
+  }
+  printInt(canary_begin);
+  printInt(canary_end);
+}
+	
