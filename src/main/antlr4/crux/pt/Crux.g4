@@ -32,17 +32,16 @@ op2 : MUL | DIV | AND ;
 expression0: expression1 (op0 expression1)*;
 expression1: expression2 | expression1 op1 expression2;
 expression2: expression3 | expression2 op2 expression3;
-
 expression3
  : NOT expression3
- | OPEN_PAREN expression0 OPEN_PAREN
+ | OPEN_PAREN expression0 CLOSE_PAREN
  | designator
  | callExpression
  | literal
  ;
 
 designator
- : Identifier (OPEN_BRACKET expression0 OPEN_BRACKET)*;
+ : Identifier (OPEN_BRACKET expression0 CLOSE_BRACKET)*;
 
 
 type
@@ -144,6 +143,9 @@ False: 'false';
 
 Identifier
  : [a-zA-Z] [a-zA-Z0-9_]*
+ | 'void'
+ | 'bool'
+ | 'int'
  ;
 
 WhiteSpaces
