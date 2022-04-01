@@ -16,6 +16,33 @@ declaration
 variableDeclaration
  : type Identifier ';'
  ;
+arrayDeclaration
+ : type Identifier OPEN_BRACKET Integer CLOSE_BRACKET SemiColon
+ ;
+functionDefinition
+ : type Identifier OPEN_PAREN parameterList CLOSE_PAREN statementBlock
+ ;
+
+
+op0 : GREATER_EQUAL | LESSER_EQUAL | NOT_EQUAL | EQUAL | GREATER_THAN | LESS_THAN ;
+op1 : ADD | SUB | OR ;
+op2 : MUL | DIV | AND ;
+
+
+expression0: expression1 (op0 expression1)*;
+expression1: expression2 (op1 expression2)*;
+expression2: expression3 (op2 expression3)*;
+expression3
+ : NOT expression3
+ | OPEN_PAREN expression0 OPEN_PAREN
+ | designator
+ | callExpression
+ | literal
+ ;
+
+designator
+ : Identifier (OPEN_BRACKET expression0 OPEN_BRACKET)*;
+
 
 type
  : Identifier
@@ -26,54 +53,6 @@ literal
  | True
  | False
  ;
-
-designator
- : IDENTIFIER  '[' '[' expression0 ']' ']'
- ;
-
-op0 : '>=' | '<=' | '!=' | '==' | '>' | '<' ;
-op1 : '+' | '-' | '||' ;
-op2 : '*' | '/' | '&&' ;
-
-expression0 : expression1 op0 expression1;
-expression1 : expression2
-       | expression1 op1 expression2;
-expression2 : expression3
-       | expression2 op2 expression3;
-expression3 : '!' expression3
-       | '(' expression0 ')'
-       | designator
-       | call_expression
-       | literal;
-
-call_expression : IDENTIFIER '(' expression_list ')';
-expression_list : '[' expression0 '{' ',' expression0 '}' ']';
-
-parameter : type IDENTIFIER;
-parameter_list : '[' parameter '{' ',' parameter '}' ']';
-
-variable_declaration : type IDENTIFIER SemiColon;
-arrayDeclaration : type IDENTIFIER '[' INTEGER ']' SemiColon;
-functionDefinition : type IDENTIFIER '(' parameter_list ')' statement_block;
-//declaration : variable_declaration | array_declaration | function_definition;
-//declarationList : '{' declaration '}';
-assignment_statement : designator '=' expression0 SemiColon;
-assignment_statement_no_semi : designator '=' expression0;
-call_statement : call_expression SemiColon;
-if_statement : 'if' expression0 statement_block '[' 'else' statement_block ']';
-for_statement : 'for' '(' assignment_statement expression0 SemiColon assignment_statement_no_semi')' statement_block;
-break_statement : 'break' SemiColon ;
-return_statement : 'return' expression0 SemiColon ;
-statement : variable_declaration
-           | call_statement
-           | assignment_statement
-           | if_statement
-           | for_statement
-           | break_statement
-           | return_statement ;
-statement_list : statement* ;
-statement_block : '{' statement_list '}';
-
 
 
 SemiColon: ';';
@@ -95,7 +74,6 @@ GREATER_THAN: '>';
 LESS_THAN: '<';
 ASSIGN: '=';
 COMMA: ',';
-//SemiColon: ';';
 
 AND: '&&';
 OR: '||';
@@ -105,6 +83,55 @@ ELSE: 'else';
 FOR: 'for';
 BREAK: 'break';
 RETURN: 'return';
+
+callExpression
+ : Identifier OPEN_PAREN expressionList CLOSE_PAREN;
+expressionList
+ : | expression0 (COMMA expression0)*;
+
+parameter
+ : type Identifier;
+parameterList
+ : | parameter (COMMA parameter)*;
+
+
+assignmentStatement
+ : designator EQUAL expression0 SemiColon
+ ;
+assignmentStatementNoSemi
+ : designator EQUAL expression0
+ ;
+callStatement
+ : callExpression SemiColon
+ ;
+ifStatement
+ : IF expression0 statementBlock OPEN_BRACKET ELSE statementBlock CLOSE_BRACKET
+ ;
+forStatement
+ : FOR OPEN_PAREN assignmentStatement expression0 SemiColon assignmentStatementNoSemi CLOSE_PAREN statementBlock
+ ;
+breakStatement
+ : BREAK SemiColon
+ ;
+returnStatement
+ : RETURN expression0 SemiColon
+ ;
+statement
+ : variableDeclaration
+ | callStatement
+ | assignmentStatement
+ | ifStatement
+ | forStatement
+ | breakStatement
+ | returnStatement
+ ;
+
+statementList
+ : statement*
+ ;
+statementBlock
+ : OPEN_BRACE statementList CLOSE_BRACE;
+
 
 Integer
  : '0'
