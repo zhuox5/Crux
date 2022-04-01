@@ -30,8 +30,9 @@ op2 : MUL | DIV | AND ;
 
 
 expression0: expression1 (op0 expression1)*;
-expression1: expression2 (op1 expression2)*;
-expression2: expression3 (op2 expression3)*;
+expression1: expression2 | expression1 op1 expression2;
+expression2: expression3 | expression2 op2 expression3;
+
 expression3
  : NOT expression3
  | OPEN_PAREN expression0 OPEN_PAREN
@@ -96,16 +97,16 @@ parameterList
 
 
 assignmentStatement
- : designator EQUAL expression0 SemiColon
+ : designator ASSIGN expression0 SemiColon
  ;
 assignmentStatementNoSemi
- : designator EQUAL expression0
+ : designator ASSIGN expression0
  ;
 callStatement
  : callExpression SemiColon
  ;
 ifStatement
- : IF expression0 statementBlock OPEN_BRACKET ELSE statementBlock CLOSE_BRACKET
+ : IF expression0 statementBlock (ELSE statementBlock)*  /////changed here
  ;
 forStatement
  : FOR OPEN_PAREN assignmentStatement expression0 SemiColon assignmentStatementNoSemi CLOSE_PAREN statementBlock
