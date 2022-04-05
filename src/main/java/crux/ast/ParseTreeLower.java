@@ -51,7 +51,17 @@ public final class ParseTreeLower {
    */
 
   public DeclarationList lower(CruxParser.ProgramContext program) {
-    return null;
+    //return DeclarationList.accept(program);
+    List<Declaration> myDeclaration = new ArrayList<>();
+    for(CruxParser.DeclarationContext d : program.declarationList().declaration()){
+       myDeclaration.add(d.accept(declarationVisitor));
+    }
+    if(hasEncounteredError()){
+      return null;
+    }
+    return new DeclarationList(makePosition(program), myDeclaration);
+
+    //return null;
   }
 
   /**
@@ -60,9 +70,18 @@ public final class ParseTreeLower {
    * @return a {@link StatementList} AST object.
    */
 
-  /*
-   * private StatementList lower(CruxParser.StatementListContext statementList) { } 
-   */
+
+   private StatementList lower(CruxParser.StatementListContext statementList) {
+     List<Statement> myStatement = new ArrayList<>();
+     for(CruxParser.StatementContext s : statementList.statement()){
+       myStatement.add(s.accept(statementVisitor));
+     }
+     if(hasEncounteredError()){
+       return null;
+     }
+     return new StatementList(makePosition(statementList), myStatement);
+   }
+
 
   /**
    * Similar to {@link #lower(CruxParser.StatementListContext)}, but handles symbol table as well.
@@ -70,9 +89,11 @@ public final class ParseTreeLower {
    * @return a {@link StatementList} AST object.
    */
 
-  /*
-   * private StatementList lower(CruxParser.StatementBlockContext statementBlock) { }
-   */
+  private StatementList lower(CruxParser.StatementBlockContext statementBlock) {
+    //TODO;
+    return null;
+  }
+
 
   /**
    * A parse tree visitor to create AST nodes derived from {@link Declaration}
@@ -84,10 +105,13 @@ public final class ParseTreeLower {
      * @return an AST {@link VariableDeclaration}
      */
 
-    /*
-     * @Override 
-     * public VariableDeclaration visitVariableDeclaration(CruxParser.VariableDeclarationContext ctx) { }
-     */
+
+      //@Override
+      //public VariableDeclaration visitVariableDeclaration(CruxParser.VariableDeclarationContext ctx) {
+        // Lower to VariableDeclaration
+      //  return ;
+      //}
+
 
     /**
      * Visit a parse tree array declaration and creates an AST {@link ArrayDeclaration}
