@@ -35,6 +35,7 @@ public final class ParseTreeLower {
     return new Position(start.getLine());
   }
 
+
   /**
    *
    * @return True if any errors
@@ -57,7 +58,7 @@ public final class ParseTreeLower {
        myDeclaration.add(d.accept(declarationVisitor));
     }
     if(hasEncounteredError()){
-      return null;
+      myDeclaration = null;
     }
     return new DeclarationList(makePosition(program), myDeclaration);
 
@@ -77,7 +78,7 @@ public final class ParseTreeLower {
        myStatement.add(s.accept(statementVisitor));
      }
      if(hasEncounteredError()){
-       return null;
+       myStatement = null;
      }
      return new StatementList(makePosition(statementList), myStatement);
    }
@@ -91,7 +92,10 @@ public final class ParseTreeLower {
 
   private StatementList lower(CruxParser.StatementBlockContext statementBlock) {
     //TODO;
-    return null;
+    symTab.enter();
+    StatementList myStatementList = lower(statementBlock.statementList());
+    symTab.exit();
+    return myStatementList;
   }
 
 
@@ -105,12 +109,17 @@ public final class ParseTreeLower {
      * @return an AST {@link VariableDeclaration}
      */
 
+      @Override
+      public VariableDeclaration visitVariableDeclaration(CruxParser.VariableDeclarationContext ctx) {
+         //Lower to VariableDeclaration
+        Position myPosition = makePosition(ctx);
+        String myName = ctx.Identifier().getText();
+        Type myType = ctx.type();
+        Symbol mySymbol = symTab.add(myPosition, myName, myType);
 
-      //@Override
-      //public VariableDeclaration visitVariableDeclaration(CruxParser.VariableDeclarationContext ctx) {
-        // Lower to VariableDeclaration
-      //  return ;
-      //}
+        VariableDeclaration myVD = new VariableDeclaration(myPosition, mySymbol);
+        return myVD;
+      }
 
 
     /**
