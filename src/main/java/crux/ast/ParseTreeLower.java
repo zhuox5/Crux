@@ -35,6 +35,23 @@ public final class ParseTreeLower {
     return new Position(start.getLine());
   }
 
+  public Type getType(String typeName){
+    Type newType;
+    if(typeName.equals("bool")){
+        newType = new IntType();
+    }
+    else if(typeName.equals("void")){
+      newType = new VoidType();
+    }
+    else if(typeName.equals("int")){
+      newType = new IntType();
+    }
+    else{
+      return new ErrorType(typeName);
+    }
+    return newType;
+  }
+
 
   /**
    *
@@ -91,7 +108,6 @@ public final class ParseTreeLower {
    */
 
   private StatementList lower(CruxParser.StatementBlockContext statementBlock) {
-    //TODO;
     symTab.enter();
     StatementList myStatementList = lower(statementBlock.statementList());
     symTab.exit();
@@ -114,7 +130,8 @@ public final class ParseTreeLower {
          //Lower to VariableDeclaration
         Position myPosition = makePosition(ctx);
         String myName = ctx.Identifier().getText();
-        Type myType = ctx.type();
+        String typeName = ctx.type().Identifier().getText();
+        Type myType = getType(typeName);
         Symbol mySymbol = symTab.add(myPosition, myName, myType);
 
         VariableDeclaration myVD = new VariableDeclaration(myPosition, mySymbol);
@@ -128,10 +145,20 @@ public final class ParseTreeLower {
      * @return an AST {@link ArrayDeclaration}
      */
 
-    /*
-     * @Override
-     * public Declaration visitArrayDeclaration(CruxParser.ArrayDeclarationContext ctx) { }
-     */
+
+     @Override
+     public Declaration visitArrayDeclaration(CruxParser.ArrayDeclarationContext ctx) {
+       Position myPosition = makePosition(ctx);
+       String myName = ctx.Identifier().getText();
+       String typeName = ctx.type().Identifier().getText();
+       Type myType = getType(typeName);
+       Symbol mySymbol = symTab.add(myPosition, myName,
+               new ArrayType(Long.parseLong(ctx.Integer().getText()), myType));
+
+       ArrayDeclaration myAD = new ArrayDeclaration(myPosition, mySymbol);
+       return myAD;
+     }
+
 
     /**
      * Visit a parse tree function definition and create an AST {@link FunctionDefinition}
@@ -139,10 +166,28 @@ public final class ParseTreeLower {
      * @return an AST {@link FunctionDefinition}
      */
 
-    /*
-     * @Override
-     * public Declaration visitFunctionDefinition(CruxParser.FunctionDefinitionContext ctx) { }
-     */
+
+     @Override
+     public Declaration visitFunctionDefinition(CruxParser.FunctionDefinitionContext ctx) {
+       Position myPosition = makePosition(ctx);
+       List<Symbol> myParameters = new ArrayList<>();
+       List<Statement> myStatement ;
+       TypeList myTypeList = new TypeList();
+       for (CruxParser.ParameterContext parameter : ctx.parameterList().parameter()) {
+         Type temp = getType(parameter.type().Identifier().getText());
+         myTypeList.append(temp);
+       }
+       Type myReturnType = getType(ctx.Identifier().getText());
+       Symbol mySymbol = symTab.add(myPosition,
+               ctx.Identifier().getText(),
+               new FuncType(myTypeList, myReturnType));
+       StatementList myStatementList = lower(ctx.statementBlock().statementList());
+       FunctionDefinition myFD = new FunctionDefinition(myPosition, mySymbol, myParameters, myStatementList);
+       return myFD;
+       ////////////////////////////////////////////////////////////////////////////////////////////////////
+       //TODO
+     }
+
   }
 
 
@@ -161,10 +206,12 @@ public final class ParseTreeLower {
      * @return an AST {@link VariableDeclaration}
      */
 
-    /*
-     * @Override
-     * public Statement visitVariableDeclaration(CruxParser.VariableDeclarationContext ctx) { }
-     */
+
+     @Override
+     public Statement visitVariableDeclaration(CruxParser.VariableDeclarationContext ctx) {
+       return declarationVisitor.visitVariableDeclaration(ctx);
+     }
+
     
     /**
      * Visit a parse tree assignment statement and create an AST {@link Assignment}
@@ -172,10 +219,12 @@ public final class ParseTreeLower {
      * @return an AST {@link Assignment}
      */
 
-    /*
-     * @Override
-     * public Statement visitAssignmentStatement(CruxParser.AssignmentStatementContext ctx) { }
-     */
+
+     @Override
+     public Statement visitAssignmentStatement(CruxParser.AssignmentStatementContext ctx) {
+       return statementVisitor.visitAssignmentStatement(ctx);
+     }
+
 
     /**
      * Visit a parse tree assignment nosemi statement and create an AST {@link Assignment}
@@ -183,10 +232,12 @@ public final class ParseTreeLower {
      * @return an AST {@link Assignment}
      */
 
-    /*
-     * @Override
-     * public Statement visitAssignmentStatementNoSemi(CruxParser.AssignmentStatementNoSemiContext ctx) { }
-     */
+
+     @Override
+     public Statement visitAssignmentStatementNoSemi(CruxParser.AssignmentStatementNoSemiContext ctx) {
+       return statementVisitor.visitAssignmentStatementNoSemi(ctx);
+     }
+
 
     /**
      * Visit a parse tree call statement and create an AST {@link Call}. Since {@link Call} is both
@@ -197,10 +248,12 @@ public final class ParseTreeLower {
      * @return an AST {@link Call}
      */
 
-    /*
-     * @Override
-     * public Statement visitCallStatement(CruxParser.CallStatementContext ctx) { }
-     */
+
+     @Override
+     public Statement visitCallStatement(CruxParser.CallStatementContext ctx) {
+       return expressionVisitor.visitCallExpression(ctx.callExpression());
+     }
+
 
     /**
      * Visit a parse tree if-else branch and create an AST {@link IfElseBranch}. The template code
@@ -210,10 +263,23 @@ public final class ParseTreeLower {
      * @return an AST {@link IfElseBranch}
      */
 
-    /*
-     * @Override
-     * public Statement visitIfStatement(CruxParser.IfStatementContext ctx) { }
-     */
+
+     @Override
+     public Statement visitIfStatement(CruxParser.IfStatementContext ctx) {
+       IfElseBranch myIEB;
+       Position myPosition = makePosition(ctx);
+       Expression myExpression = ctx.expression0().accept(expressionVisitor);
+       if (ctx.statementBlock().size() >= 2) { //Muti-statement
+         myIEB = new IfElseBranch(myPosition, myExpression, lower(ctx.statementBlock(0)),
+                 lower(ctx.statementBlock(1)));
+       }
+       else {
+         StatementList elseBlock = new StatementList(myPosition, new ArrayList<>());
+         myIEB = new IfElseBranch(myPosition, myExpression, lower(ctx.statementBlock(0)), elseBlock);
+       }
+       return myIEB;
+     }
+
 
     /**
      * Visit a parse tree for loop and create an AST {@link For}. You'll going to use a similar
@@ -223,10 +289,19 @@ public final class ParseTreeLower {
      * @return an AST {@link Loop}
      */
 
-    /*
-     * @Override
-     * public Statement visitForStatement(CruxParser.ForStatementContext ctx) { }
-     */
+
+     @Override
+     public Statement visitForStatement(CruxParser.ForStatementContext ctx) {
+       Position myPosition = makePosition(ctx);
+       Assignment myInit = null;
+       Expression myCond = ctx.expression0().accept(expressionVisitor); //TODO expression visitor???
+       Assignment myIncrement = null;
+       StatementList myBody = lower(ctx.statementBlock());
+       return new For(myPosition, myInit, myCond, myIncrement, myBody);
+
+       //TODO
+     }
+
 
     /**
      * Visit a parse tree return statement and create an AST {@link Return}. Here we show a simple
@@ -235,19 +310,26 @@ public final class ParseTreeLower {
      * @return an AST {@link Return}
      */
 
-    /*
-     * @Override
-     * public Statement visitReturnStatement(CruxParser.ReturnStatementContext ctx) { }
-     */
+
+     @Override
+     public Statement visitReturnStatement(CruxParser.ReturnStatementContext ctx) {
+       Position myPosition = makePosition(ctx);
+       Expression myExpression = ctx.expression0().accept(expressionVisitor);
+       return new Return(myPosition, myExpression);
+     }
+
 
     /**
      * Creates a Break node
      */
 
-    /*
-     * @Override
-     * public Statement visitBreakStatement(CruxParser.BreakStatementContext ctx) { }
-     */
+
+     @Override
+     public Statement visitBreakStatement(CruxParser.BreakStatementContext ctx) {
+         Position myPosition = makePosition(ctx);
+         return new Break(myPosition);
+     }
+
   }
 
   private final class ExpressionVisitor extends CruxBaseVisitor<Expression> {
@@ -256,20 +338,54 @@ public final class ParseTreeLower {
      * grammer
      */
 
-    /*
-     * @Override
-     * public Expression visitExpression0(CruxParser.Expression0Context ctx) { }
-     */
+     @Override
+     public Expression visitExpression0(CruxParser.Expression0Context ctx) {
+         List<CruxParser.Expression1Context> exp1Context = ctx.expression1();
+         Position myPosition = makePosition(ctx.op0(0));
+         Expression left_expression = exp1Context.get(0).accept(expressionVisitor);
+         Expression right_expression = exp1Context.get(1).accept(expressionVisitor);
+         if(exp1Context.size() == 1){
+             return left_expression;
+         }
+         else{
+             if(ctx.op0(0).getText().equals(">=")){
+                 return new OpExpr(myPosition, Operation.GE, left_expression, right_expression);
+             }
+             else if(ctx.op0(0).getText().equals("<=")){
+                 return new OpExpr(myPosition, Operation.LE, left_expression, right_expression);
+             }
+             else if(ctx.op0(0).getText().equals("!=")){
+                 return new OpExpr(myPosition, Operation.NE, left_expression, right_expression);
+             }
+             else if(ctx.op0(0).getText().equals("==")){
+                 return new OpExpr(myPosition, Operation.EQ, left_expression, right_expression);
+             }
+             else if(ctx.op0(0).getText().equals(">")){
+                 return new OpExpr(myPosition, Operation.GT, left_expression, right_expression);
+             }
+             else if(ctx.op0(0).getText().equals("<")){
+                 return new OpExpr(myPosition, Operation.LT, left_expression, right_expression);
+             }
+         }
+         return new OpExpr(myPosition, Operation.EQ, left_expression, right_expression);
+     }
+
 
     /**
      * Parse Expression1 to OpExpr Node Parsing the expression should be exactly as described in the
      * grammer
      */
 
-    /*
-     * @Override
-     * public Expression visitExpression1(CruxParser.Expression1Context ctx) { }
-     */
+
+    @Override
+     public Expression visitExpression1(CruxParser.Expression1Context ctx) {
+        //List<CruxParser.Expression2Context> exp1Context = ctx.expression2();
+        CruxParser.Expression2Context exp2Context = ctx.expression2();
+        Position myPosition = makePosition(ctx.op1());
+        Expression myExpression = exp2Context.accept(expressionVisitor);
+        return new OpExpr(myPosition);
+    }
+
 
     /**
      * Parse Expression2 to OpExpr Node Parsing the expression should be exactly as described in the
@@ -295,9 +411,12 @@ public final class ParseTreeLower {
      * Create an Call Node
      */
 
-    /* @Override
-     * public Call visitCallExpression(CruxParser.CallExpressionContext ctx) { }
-     */
+     @Override
+     public Call visitCallExpression(CruxParser.CallExpressionContext ctx) {
+       return null;
+       //TODO
+     }
+
 
     /**
      * visitDesignator will check for a name or ArrayAccess FYI it should account for the case when
