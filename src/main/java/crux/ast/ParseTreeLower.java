@@ -349,13 +349,14 @@ public final class ParseTreeLower {
      @Override
      public Expression visitExpression0(CruxParser.Expression0Context ctx) {
          List<CruxParser.Expression1Context> exp1Context = ctx.expression1();
-         Position myPosition = makePosition(ctx.op0(0));
+         Position myPosition = makePosition(ctx);
          Expression left_expression = exp1Context.get(0).accept(expressionVisitor);
-         Expression right_expression = exp1Context.get(1).accept(expressionVisitor);
-         if(ctx.op0() == null){
+
+         if(ctx.op0() == null || ctx.expression1(1) == null){
              return left_expression;
          }
          else{
+             Expression right_expression = exp1Context.get(1).accept(expressionVisitor);
              if(ctx.op0(0).getText().equals(">=")){
                  return new OpExpr(myPosition, Operation.GE, left_expression, right_expression);
              }
@@ -375,7 +376,8 @@ public final class ParseTreeLower {
                  return new OpExpr(myPosition, Operation.LT, left_expression, right_expression);
              }
          }
-         return new OpExpr(myPosition, null, left_expression, right_expression);
+         //return new OpExpr(myPosition, null, left_expression, right_expression);
+         return null;
      }
 
 
@@ -389,7 +391,7 @@ public final class ParseTreeLower {
      public Expression visitExpression1(CruxParser.Expression1Context ctx) {
         //List<CruxParser.Expression2Context> exp1Context = ctx.expression2();
         CruxParser.Expression2Context exp2Context = ctx.expression2();
-        Position myPosition = makePosition(ctx.op1());
+        Position myPosition = makePosition(ctx);
         Expression myExpression = exp2Context.accept(expressionVisitor);
         if(ctx.op1() == null){
             return myExpression;
@@ -407,7 +409,7 @@ public final class ParseTreeLower {
                 return new OpExpr(myPosition, Operation.LOGIC_OR, left_expression, right_expression);
             }
             else{
-                return new OpExpr(myPosition, null, left_expression, right_expression);
+                return null;
             }
         }
     }
@@ -422,7 +424,7 @@ public final class ParseTreeLower {
      @Override
      public Expression visitExpression2(CruxParser.Expression2Context ctx) {
          CruxParser.Expression3Context exp3Context = ctx.expression3();
-         Position myPosition = makePosition(ctx.op2());
+         Position myPosition = makePosition(ctx);
          Expression myExpression = exp3Context.accept(expressionVisitor);
          if(ctx.op2() == null){
              return myExpression;
@@ -455,8 +457,9 @@ public final class ParseTreeLower {
     @Override
      public Expression visitExpression3(CruxParser.Expression3Context ctx) {
         Position myPosition = makePosition(ctx);
-        Expression left_expression = ctx.expression3().accept(expressionVisitor);
+        //Expression left_expression = ctx.expression3().accept(expressionVisitor);
         if(ctx.expression3() != null){
+            Expression left_expression = ctx.expression3().accept(expressionVisitor);
             return new OpExpr(myPosition, Operation.LOGIC_NOT, left_expression, null);
         }
         else if(ctx.expression0() != null){
