@@ -85,7 +85,9 @@ public final class SymbolTable {
   SymbolTable(PrintStream err) {
     this.err = err;
     //TODO
+    enter();
   }
+
 
   boolean hasEncounteredError() {
     return encounteredError;
@@ -97,6 +99,7 @@ public final class SymbolTable {
 
   void enter() {
     //TODO
+    symbolScopes.add(new HashMap<String, Symbol>());
   }
 
   /**
@@ -105,6 +108,7 @@ public final class SymbolTable {
 
   void exit() {
     //TODO
+    symbolScopes.remove(symbolScopes.size()-1);
   }
 
   /**
@@ -113,7 +117,18 @@ public final class SymbolTable {
    */
   Symbol add(Position pos, String name, Type type) {
     //TODO
-    return null;
+    int currentIndex = symbolScopes.size()-1;
+    Map<String, Symbol> recentScope = symbolScopes.get(currentIndex);
+    if(!recentScope.containsKey(name)){
+      Symbol mySymbol = new Symbol(name, type);
+      recentScope.put(name, mySymbol);
+      return mySymbol;
+    }
+    else {
+      err.printf("DeclareSymbolError%s[Could not find %s.]%n", pos, name);
+      encounteredError = true;
+      return new Symbol(name, "DeclareSymbolError");
+    }
   }
 
   /**
@@ -136,6 +151,13 @@ public final class SymbolTable {
    */
   private Symbol find(String name) {
     //TODO
+    if(name == null) return null;
+    for(int i=symbolScopes.size()-1; i>-1; i--){
+      Map<String, Symbol> recentScope = symbolScopes.get(i);
+      if(recentScope.containsKey(name)){
+        return recentScope.get(name);
+      }
+    }
     return null;
   }
 }
