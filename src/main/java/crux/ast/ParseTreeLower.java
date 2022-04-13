@@ -241,7 +241,10 @@ public final class ParseTreeLower {
 
      @Override
      public Statement visitAssignmentStatementNoSemi(CruxParser.AssignmentStatementNoSemiContext ctx) {
-       return statementVisitor.visitAssignmentStatementNoSemi(ctx);
+         Position myPosition = makePosition(ctx);
+         Expression lhs = ctx.designator().accept(expressionVisitor);
+         Expression rhs = ctx.expression0().accept(expressionVisitor);
+         return new Assignment(myPosition, lhs, rhs);
      }
 
 
@@ -502,7 +505,7 @@ public final class ParseTreeLower {
     @Override
      public Expression visitDesignator(CruxParser.DesignatorContext ctx) {
         Position myPosition = makePosition(ctx);
-        if(ctx.expression0() == null){                  //VarAccess
+        if(ctx.expression0() == null || ctx.expression0(0) == null){                  //VarAccess
             Symbol mySymbol = symTab.lookup(myPosition, ctx.Identifier().getSymbol().getText());
             return new VarAccess(myPosition, mySymbol);
         }
