@@ -1,5 +1,6 @@
 package crux.ast;
 
+import com.sun.jdi.CharType;
 import crux.ast.Position;
 import crux.ast.types.*;
 
@@ -85,7 +86,28 @@ public final class SymbolTable {
   SymbolTable(PrintStream err) {
     this.err = err;
     //TODO
-    enter();
+    Map<String, Symbol> myScope = new HashMap<>();
+
+    FuncType readIntFuncType = new FuncType(TypeList.of(), new IntType());
+    myScope.put("readInt", new Symbol("readInt", readIntFuncType));
+
+    FuncType readCharFuncType = new FuncType(TypeList.of(), new IntType());
+    myScope.put("readChar", new Symbol("readChar", readCharFuncType));
+
+    FuncType printBoolFuncType = new FuncType(TypeList.of(new BoolType()), new VoidType());
+    myScope.put("printBool", new Symbol("printBool", printBoolFuncType));
+
+    FuncType printIntFuncType = new FuncType(TypeList.of(new IntType()), new VoidType());
+    myScope.put("printInt", new Symbol("printInt", printIntFuncType));
+
+    FuncType printCharFuncType = new FuncType(TypeList.of(new IntType()), new VoidType());
+    myScope.put("printChar", new Symbol("printChar", printCharFuncType));
+
+    FuncType printlnFuncType = new FuncType(TypeList.of(), new VoidType());
+    myScope.put("println", new Symbol("println", printlnFuncType));
+
+    symbolScopes.add(myScope);
+
   }
 
 
@@ -119,15 +141,15 @@ public final class SymbolTable {
     //TODO
     int currentIndex = symbolScopes.size()-1;
     Map<String, Symbol> recentScope = symbolScopes.get(currentIndex);
-    if(!recentScope.containsKey(name)){
-      Symbol mySymbol = new Symbol(name, type);
-      recentScope.put(name, mySymbol);
-      return mySymbol;
-    }
-    else {
+    if(recentScope.containsKey(name)){
       err.printf("DeclareSymbolError%s[Could not find %s.]%n", pos, name);
       encounteredError = true;
       return new Symbol(name, "DeclareSymbolError");
+    }
+    else {
+      Symbol mySymbol = new Symbol(name, type);
+      symbolScopes.get(symbolScopes.size()-1).put(name, mySymbol);
+      return mySymbol;
     }
   }
 
@@ -154,7 +176,7 @@ public final class SymbolTable {
     if(name == null) return null;
     for(int i=symbolScopes.size()-1; i>-1; i--){
       Map<String, Symbol> recentScope = symbolScopes.get(i);
-      if(recentScope.containsKey(name)){
+      if(recentScope.get(name) != null){
         return recentScope.get(name);
       }
     }

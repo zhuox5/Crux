@@ -36,18 +36,17 @@ public final class ParseTreeLower {
   }
 
   public Type getType(String typeName){
-    Type newType;
+
     if(typeName.equals("bool")){
-        newType = new IntType();
+        return new BoolType();
     }
     else if(typeName.equals("void")){
-      newType = new VoidType();
+        return new VoidType();
     }
     else if(typeName.equals("int")){
-      newType = new IntType();
+        return new IntType();
     }
     return new ErrorType(typeName);
-    //return null;
   }
 
 
@@ -78,7 +77,6 @@ public final class ParseTreeLower {
     Position myPosition = makePosition(program.declarationList());
     return new DeclarationList(myPosition, myDeclaration);
 
-    //return null;
   }
 
   /**
@@ -107,11 +105,10 @@ public final class ParseTreeLower {
    */
 
   private StatementList lower(CruxParser.StatementBlockContext statementBlock) {
-    symTab.enter();
-    StatementList myStatementList = lower(statementBlock.statementList());
-    symTab.exit();
-    return myStatementList;
-    //TODO
+      symTab.enter();
+      StatementList myStatementList = lower(statementBlock.statementList());
+      symTab.exit();
+      return myStatementList;
   }
 
 
@@ -134,8 +131,7 @@ public final class ParseTreeLower {
         Type myType = getType(typeName);
         Symbol mySymbol = symTab.add(myPosition, myName, myType);
 
-        VariableDeclaration myVD = new VariableDeclaration(myPosition, mySymbol);
-        return myVD;
+        return new VariableDeclaration(myPosition, mySymbol);
       }
 
 
@@ -155,8 +151,7 @@ public final class ParseTreeLower {
        Symbol mySymbol = symTab.add(myPosition, myName,
                new ArrayType(Long.parseLong(ctx.Integer().getText()), myType));
 
-       ArrayDeclaration myAD = new ArrayDeclaration(myPosition, mySymbol);
-       return myAD;
+       return new ArrayDeclaration(myPosition, mySymbol);
      }
 
 
@@ -170,26 +165,31 @@ public final class ParseTreeLower {
      @Override
      public Declaration visitFunctionDefinition(CruxParser.FunctionDefinitionContext ctx) {
        Position myPosition = makePosition(ctx);
-       List<Symbol> myParameters = new ArrayList<>();
-       List<Statement> myStatement;
+       //List<Statement> myStatement;
        TypeList myTypeList = new TypeList();
-       for (CruxParser.ParameterContext parameter : ctx.parameterList().parameter()) {
+       for(CruxParser.ParameterContext parameter : ctx.parameterList().parameter()) {
          Type temp = getType(parameter.type().Identifier().getText());
          myTypeList.append(temp);
        }
+
        Type myReturnType = getType(ctx.Identifier().getText());
+       List<Symbol> myParameters = new ArrayList<>();
        Symbol mySymbol = symTab.add(myPosition,
                ctx.Identifier().getText(),
                new FuncType(myTypeList, myReturnType));
+
+       symTab.enter();
+       for(CruxParser.ParameterContext parameter : ctx.parameterList().parameter()){
+           Symbol temp = symTab.add(makePosition(parameter),
+                   parameter.Identifier().getText(),
+                   getType(parameter.type().Identifier().getText()));
+           myParameters.add(temp);
+       }
        StatementList myStatementList = lower(ctx.statementBlock().statementList());
        FunctionDefinition myFD = new FunctionDefinition(myPosition, mySymbol, myParameters, myStatementList);
+       symTab.exit();
        return myFD;
-       ////////////////////////////////////////////////////////////////////////////////////////////////////
-       //TODO
-         //enter
-         //exit
      }
-
   }
 
 
@@ -224,7 +224,11 @@ public final class ParseTreeLower {
 
      @Override
      public Statement visitAssignmentStatement(CruxParser.AssignmentStatementContext ctx) {
-       return statementVisitor.visitAssignmentStatement(ctx); //TODO
+       //return statementVisitor.visitAssignmentStatement(ctx);
+         Position myPosition = makePosition(ctx);
+         Expression lhs = ctx.designator().accept(expressionVisitor);
+         Expression rhs = ctx.expression0().accept(expressionVisitor);
+         return new Assignment(myPosition, lhs, rhs);
      }
 
 
@@ -288,25 +292,25 @@ public final class ParseTreeLower {
      * techniques as {@link #visitIfStatement(CruxParser.IfStatementContext)} to decompose this
      * construction.
      *
-     * @return an AST {@link Loop}
+     * @return an AST {@link For}
      */
 
-    /*
+
      //FOR OPEN_PAREN assignmentStatement expression0
      //SemiColon assignmentStatementNoSemi CLOSE_PAREN statementBlock
      @Override
      public Statement visitForStatement(CruxParser.ForStatementContext ctx) {
-       Position myPosition = makePosition(ctx);
-       //Assignment myInit = new Assignment(myPosition, ctx.accept(visitor).);
-       Assignment myInit = null;
-       Expression myCond = ctx.expression0().accept(expressionVisitor); //TODO expression visitor???
-       Assignment myIncrement = null;
-       StatementList myBody = lower(ctx.statementBlock());
-       return new For(myPosition, myInit, myCond, myIncrement, myBody);
-       //TODO
-         //return new For(null, null, null, null, null);
+         symTab.enter();
+         Position myPosition = makePosition(ctx);
+         var myInit = (Assignment) ctx.assignmentStatement().accept(statementVisitor);
+         Expression myCond = ctx.expression0().accept(expressionVisitor);
+         var myIncrement = (Assignment) ctx.assignmentStatementNoSemi().accept(statementVisitor);
+         StatementList myBody = lower(ctx.statementBlock());
+         symTab.exit();
+         return new For(myPosition, myInit, myCond, myIncrement, myBody);
+
      }
-     */
+
 
 
     /**
@@ -324,11 +328,9 @@ public final class ParseTreeLower {
        return new Return(myPosition, myExpression);
      }
 
-
     /**
      * Creates a Break node
      */
-
 
      @Override
      public Statement visitBreakStatement(CruxParser.BreakStatementContext ctx) {
@@ -350,7 +352,7 @@ public final class ParseTreeLower {
          Position myPosition = makePosition(ctx.op0(0));
          Expression left_expression = exp1Context.get(0).accept(expressionVisitor);
          Expression right_expression = exp1Context.get(1).accept(expressionVisitor);
-         if(exp1Context.size() == 1){
+         if(ctx.op0() == null){
              return left_expression;
          }
          else{
@@ -373,7 +375,7 @@ public final class ParseTreeLower {
                  return new OpExpr(myPosition, Operation.LT, left_expression, right_expression);
              }
          }
-         return new OpExpr(myPosition, Operation.EQ, left_expression, right_expression);
+         return new OpExpr(myPosition, null, left_expression, right_expression);
      }
 
 
@@ -405,7 +407,7 @@ public final class ParseTreeLower {
                 return new OpExpr(myPosition, Operation.LOGIC_OR, left_expression, right_expression);
             }
             else{
-                return myExpression;
+                return new OpExpr(myPosition, null, left_expression, right_expression);
             }
         }
     }
@@ -438,7 +440,7 @@ public final class ParseTreeLower {
                  return new OpExpr(myPosition, Operation.LOGIC_AND, left_expression, right_expression);
              }
              else{
-                 return myExpression;
+                 return new OpExpr(myPosition, Operation.LOGIC_OR, left_expression, right_expression);
              }
          }
      }
@@ -479,10 +481,13 @@ public final class ParseTreeLower {
 
      @Override
      public Call visitCallExpression(CruxParser.CallExpressionContext ctx) {
-         List<Expression> myExpressionList = new ArrayList<>();
          Position myPosition = makePosition(ctx);
-         return null;
-       //TODO
+         Symbol mySymbol = symTab.lookup(myPosition, ctx.Identifier().getSymbol().getText());
+         List<Expression> expressions = new ArrayList<>();
+         for (CruxParser.Expression0Context exp : ctx.expressionList().expression0()){
+             expressions.add(expressionVisitor.visitExpression0(exp));
+         }
+         return new Call(myPosition, mySymbol, expressions);
      }
 
 
@@ -493,11 +498,17 @@ public final class ParseTreeLower {
 
     @Override
      public Expression visitDesignator(CruxParser.DesignatorContext ctx) {
-        //return ctx.Identifier();
-        //TODO
-        return null;
+        Position myPosition = makePosition(ctx);
+        if(ctx.expression0() == null){                  //VarAccess
+            Symbol mySymbol = symTab.lookup(myPosition, ctx.Identifier().getSymbol().getText());
+            return new VarAccess(myPosition, mySymbol);
+        }
+        else{                                           //ArrayAccess
+            var myIndex = ctx.expression0(0).accept(expressionVisitor);
+            Symbol mySymbol = symTab.lookup(myPosition, ctx.Identifier().getSymbol().getText());
+            return new ArrayAccess(myPosition, mySymbol, myIndex);
+        }
     }
-
 
     /**
      * Create an Literal Node
@@ -506,10 +517,10 @@ public final class ParseTreeLower {
     @Override
     public Expression visitLiteral(CruxParser.LiteralContext ctx) {
         Position myPosition = makePosition(ctx);
-        if(ctx.getText() == "true"){
+        if(ctx.getText().equals("true")){
             return new LiteralBool(myPosition, true);
         }
-        else if(ctx.getText() == "false"){
+        else if(ctx.getText().equals("false")){
             return new LiteralBool(myPosition, false);
         }
         else{
