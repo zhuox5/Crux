@@ -46,10 +46,8 @@ public final class ParseTreeLower {
     else if(typeName.equals("int")){
       newType = new IntType();
     }
-    else{
-      return new ErrorType(typeName);
-    }
-    return null;
+    return new ErrorType(typeName);
+    //return null;
   }
 
 
@@ -64,7 +62,7 @@ public final class ParseTreeLower {
 
   /**
    * Lower top-level parse tree to AST
-   * 
+   *
    * @return a {@link DeclarationList} object representing the top-level AST.
    */
 
@@ -85,7 +83,7 @@ public final class ParseTreeLower {
 
   /**
    * Lower statement list by lower individual statement into AST.
-   * 
+   *
    * @return a {@link StatementList} AST object.
    */
 
@@ -104,7 +102,7 @@ public final class ParseTreeLower {
 
   /**
    * Similar to {@link #lower(CruxParser.StatementListContext)}, but handles symbol table as well.
-   * 
+   *
    * @return a {@link StatementList} AST object.
    */
 
@@ -123,7 +121,7 @@ public final class ParseTreeLower {
   private final class DeclarationVisitor extends CruxBaseVisitor<Declaration> {
     /**
      * Visit a parse tree variable declaration and create an AST {@link VariableDeclaration}
-     * 
+     *
      * @return an AST {@link VariableDeclaration}
      */
 
@@ -143,7 +141,7 @@ public final class ParseTreeLower {
 
     /**
      * Visit a parse tree array declaration and creates an AST {@link ArrayDeclaration}
-     * 
+     *
      * @return an AST {@link ArrayDeclaration}
      */
 
@@ -164,7 +162,7 @@ public final class ParseTreeLower {
 
     /**
      * Visit a parse tree function definition and create an AST {@link FunctionDefinition}
-     * 
+     *
      * @return an AST {@link FunctionDefinition}
      */
 
@@ -173,7 +171,7 @@ public final class ParseTreeLower {
      public Declaration visitFunctionDefinition(CruxParser.FunctionDefinitionContext ctx) {
        Position myPosition = makePosition(ctx);
        List<Symbol> myParameters = new ArrayList<>();
-       List<Statement> myStatement ;
+       List<Statement> myStatement;
        TypeList myTypeList = new TypeList();
        for (CruxParser.ParameterContext parameter : ctx.parameterList().parameter()) {
          Type temp = getType(parameter.type().Identifier().getText());
@@ -206,7 +204,7 @@ public final class ParseTreeLower {
      * delegate this to
      * {@link DeclarationVisitor#visitArrayDeclaration(CruxParser.ArrayDeclarationContext)} which we
      * implement earlier.
-     * 
+     *
      * @return an AST {@link VariableDeclaration}
      */
 
@@ -216,10 +214,10 @@ public final class ParseTreeLower {
        return declarationVisitor.visitVariableDeclaration(ctx);
      }
 
-    
+
     /**
      * Visit a parse tree assignment statement and create an AST {@link Assignment}
-     * 
+     *
      * @return an AST {@link Assignment}
      */
 
@@ -232,7 +230,7 @@ public final class ParseTreeLower {
 
     /**
      * Visit a parse tree assignment nosemi statement and create an AST {@link Assignment}
-     * 
+     *
      * @return an AST {@link Assignment}
      */
 
@@ -248,7 +246,7 @@ public final class ParseTreeLower {
      * {@link Expression} and {@link Statement}, we simply delegate this to
      * {@link ExpressionVisitor#visitCallExpression(CruxParser.CallExpressionContext)} that we will
      * implement later.
-     * 
+     *
      * @return an AST {@link Call}
      */
 
@@ -263,7 +261,7 @@ public final class ParseTreeLower {
      * Visit a parse tree if-else branch and create an AST {@link IfElseBranch}. The template code
      * shows partial implementations that visit the then block and else block recursively before
      * using those returned AST nodes to construct {@link IfElseBranch} object.
-     * 
+     *
      * @return an AST {@link IfElseBranch}
      */
 
@@ -289,7 +287,7 @@ public final class ParseTreeLower {
      * Visit a parse tree for loop and create an AST {@link For}. You'll going to use a similar
      * techniques as {@link #visitIfStatement(CruxParser.IfStatementContext)} to decompose this
      * construction.
-     * 
+     *
      * @return an AST {@link Loop}
      */
 
@@ -314,7 +312,7 @@ public final class ParseTreeLower {
     /**
      * Visit a parse tree return statement and create an AST {@link Return}. Here we show a simple
      * example of how to lower a simple parse tree construction.
-     * 
+     *
      * @return an AST {@link Return}
      */
 
@@ -417,7 +415,7 @@ public final class ParseTreeLower {
      * Parse Expression2 to OpExpr Node Parsing the expression should be exactly as described in the
      * grammer
      */
-    
+
 
      @Override
      public Expression visitExpression2(CruxParser.Expression2Context ctx) {
