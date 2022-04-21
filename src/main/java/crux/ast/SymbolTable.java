@@ -46,6 +46,12 @@ public final class SymbolTable {
       this.error = error;
     }
 
+    private Symbol(String name){
+      this.name = name;
+      this.type = null;
+      this.error = null;
+    }
+
     /**
      *
      * @return String the name

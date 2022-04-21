@@ -58,7 +58,9 @@ public final class TypeChecker {
   private final class TypeInferenceVisitor extends NullNodeVisitor<Void> {
     @Override
     public Void visit(VarAccess vaccess) {
+      setNodeType(vaccess, vaccess.getSymbol().getType());
       return null;
+      //TODO
     }
 
     @Override
@@ -68,6 +70,11 @@ public final class TypeChecker {
 
     @Override
     public Void visit(Assignment assignment) {
+      Expression myLocation = assignment.getLocation();
+      myLocation.accept(this);
+      Expression myValue = assignment.getValue();
+      myValue.accept(this);
+      setNodeType(assignment, getType(myLocation).assign(getType(myValue)));
       return null;
     }
 
@@ -83,6 +90,9 @@ public final class TypeChecker {
 
     @Override
     public Void visit(DeclarationList declarationList) {
+      for(Node myDeclarations : declarationList.getChildren()){
+        myDeclarations.accept(this);
+      }
       return null;
     }
 
@@ -93,21 +103,27 @@ public final class TypeChecker {
 
     @Override
     public Void visit(IfElseBranch ifElseBranch) {
+      ifElseBranch.getCondition().accept(this);
       return null;
     }
 
     @Override
     public Void visit(ArrayAccess access) {
+      access.getIndex().accept(this);
+      setNodeType(access, access.getBase().getType());
       return null;
+      //TODO
     }
 
     @Override
     public Void visit(LiteralBool literalBool) {
+      setNodeType(literalBool, new BoolType());
       return null;
     }
 
     @Override
     public Void visit(LiteralInt literalInt) {
+      setNodeType(literalInt, new IntType());
       return null;
     }
 
@@ -128,11 +144,15 @@ public final class TypeChecker {
 
     @Override
     public Void visit(StatementList statementList) {
+      for(Node myStatement : statementList.getChildren()){
+        myStatement.accept(this);
+      }
       return null;
     }
 
     @Override
     public Void visit(VariableDeclaration variableDeclaration) {
+
       return null;
     }
   }

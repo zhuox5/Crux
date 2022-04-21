@@ -49,5 +49,5 @@ public abstract class Type {
     return new ErrorType("cannot assign " + source + " to " + this);
   }
 
-  //  public abstract boolean equivalent(Type that);
+  public abstract boolean equivalent(Type that);
 }
