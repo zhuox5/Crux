@@ -172,11 +172,11 @@ public final class ParseTreeLower {
          myTypeList.append(temp);
        }
 
-       String typeName = ctx.Identifier().getText();
+       String typeName = ctx.type().getText();
        Type myReturnType = getType(typeName);
        List<Symbol> myParameters = new ArrayList<>();
        Symbol mySymbol = symTab.add(myPosition,
-               typeName,
+               ctx.Identifier().getText(),
                new FuncType(myTypeList, myReturnType));
 
        symTab.enter();
