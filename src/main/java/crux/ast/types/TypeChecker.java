@@ -139,13 +139,6 @@ public final class TypeChecker {
       currentFunctionSymbol = functionSymbol; //TODO
       FuncType retType = (FuncType)functionSymbol.getType();
       TypeList argTypes = retType.getArgs();
-      /*if (functionSymbol.getName().equals("main")){
-        if ( !retType.getRet().toString().equals("void") ||
-                !argTypes.isEmpty()) {
-          addTypeError(functionDefinition, "Function main has invalid signature.");
-          return null;
-        }
-      }*/
       FuncType myFuncType = (FuncType)functionDefinition.getSymbol().getType();
       List<Symbol> myArguments = functionDefinition.getParameters();
       for(Symbol arg : myArguments){
