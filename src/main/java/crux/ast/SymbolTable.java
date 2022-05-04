@@ -52,6 +52,13 @@ public final class SymbolTable {
       this.error = null;
     }
 
+    //Add by myself
+    /*public Symbol(String name, Type type, String error) {
+      this.name = name;
+      this.type = type;
+      this.error = null;
+    }*/
+
     /**
      *
      * @return String the name

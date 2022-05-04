@@ -39,6 +39,12 @@ public final class ASTLower implements NodeVisitor<InstPair> {
 
   @Override
   public InstPair visit(DeclarationList declarationList) {
+    mCurrentProgram = new Program();
+    mCurrentLocalVarMap = new HashMap<>();
+    for (var children : declarationList.getChildren()){
+      mCurrentFunction = null;
+      children.accept(this);
+    }
     return null;
   }
 
@@ -53,6 +59,9 @@ public final class ASTLower implements NodeVisitor<InstPair> {
 
   @Override
   public InstPair visit(StatementList statementList) {
+    for (var children : statementList.getChildren()){
+      children.accept(this);
+    }
     return null;
   }
 
@@ -61,6 +70,19 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    */
   @Override
   public InstPair visit(VariableDeclaration variableDeclaration) {
+    String myVariableName = variableDeclaration.getSymbol().getName();
+    Type myVariableType = variableDeclaration.getSymbol().getType();
+    if(mCurrentFunction == null){
+      //TODO
+      //var myAddrVar = new AddressVar(myVariableType, myVariableName);
+      var myNumElement = IntegerConstant.get(mCurrentProgram, 1);
+      var myGlobalDecl = new GlobalDecl(variableDeclaration.getSymbol(), myNumElement);
+      mCurrentProgram.addGlobalVar(myGlobalDecl);
+    }
+    else{
+      LocalVar myLocalvar = new LocalVar(myVariableType, myVariableName);
+      mCurrentLocalVarMap.put(variableDeclaration.getSymbol(), myLocalvar);
+    }
     return null;
   }
 
@@ -68,7 +90,11 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    * Create a declaration for array and connected it to the CFG
    */
   @Override
-  public InstPair visit(ArrayDeclaration arrayDeclaration) {
+  public InstPair visit(ArrayDeclaration arrayDeclaration) { //only global
+    ArrayType myArrayType = (ArrayType) arrayDeclaration.getSymbol().getType();
+    var myNumElement = IntegerConstant.get(mCurrentProgram, 1);
+    var myGlobalDecl = new GlobalDecl(arrayDeclaration.getSymbol(), myNumElement);
+    mCurrentProgram.addGlobalVar(myGlobalDecl);
     return null;
   }
 
@@ -78,6 +104,9 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    */
   @Override
   public InstPair visit(VarAccess name) {
+    if(mCurrentLocalVarMap.get(name.getSymbol()) == null){    //if not local, then is global
+      mCurrentLocalVarMap.put(name.getSymbol(), new LocalVar(name.getType()));
+    }
     return null;
   }
 
@@ -87,6 +116,20 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    */
   @Override
   public InstPair visit(Assignment assignment) {
+    //Expression lhs = assignment.getLocation();
+    Expression rhs = assignment.getValue();
+    //lhs.accept(this); //lhs
+    rhs.accept(this);//rhs
+   if(assignment.getLocation() instanceof ArrayAccess){
+
+   }
+   else if(assignment.getLocation() instanceof VarAccess &&     //is VarAccess and is global
+           (mCurrentLocalVarMap.get(assignment) == null)){
+        //AddressAt
+   }
+   else{
+
+   }
     return null;
   }
 
@@ -95,6 +138,11 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    */
   @Override
   public InstPair visit(Call call) {
+    List<LocalVar> args = new ArrayList<LocalVar>();
+    for(Expression exp : call.getArguments()){
+      exp.accept(this);
+      //args.add();
+    }
     return null;
   }
 
@@ -104,10 +152,12 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    */
   @Override
   public InstPair visit(OpExpr operation) {
+
     return null;
   }
 
   private InstPair visit(Expression expression) {
+    expression.accept(this);
     return null;
   }
 
@@ -116,6 +166,10 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    */
   @Override
   public InstPair visit(ArrayAccess access) {
+    ArrayType myArrayType = (ArrayType) access.getBase().getType();
+    access.getIndex().accept(this);
+    var dst = mCurrentFunction.getTempAddressVar(myArrayType.getBase());
+
     return null;
   }
 
@@ -132,6 +186,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    */
   @Override
   public InstPair visit(LiteralInt literalInt) {
+
     return null;
   }
 
@@ -140,8 +195,11 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    */
   @Override
   public InstPair visit(Return ret) {
+    ret.getValue().accept(this);
+    if(mCurrentProgram.getFunctions())
     return null;
   }
+
 
   /**
    * Break Node
@@ -156,6 +214,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    */
   @Override
   public InstPair visit(IfElseBranch ifElseBranch) {
+    ifElseBranch.getCondition().accept(this);
     return null;
   }
 
@@ -164,6 +223,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    */
   @Override
   public InstPair visit(For loop) {
+    loop.getCond().accept(this);
     return null;
   }
 }

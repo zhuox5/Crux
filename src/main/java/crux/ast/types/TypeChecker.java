@@ -116,8 +116,8 @@ public final class TypeChecker {
           myCallArguments.append(getType(args));
         }
       }
-      System.out.println(myFuncType);
-      System.out.println(myFuncType.call(myCallArguments));
+      //System.out.println(myFuncType);
+      //System.out.println(myFuncType.call(myCallArguments));
       //For Test
       setNodeType(call, myFuncType.call(myCallArguments));
 
