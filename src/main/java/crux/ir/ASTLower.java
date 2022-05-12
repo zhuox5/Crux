@@ -143,9 +143,9 @@ public final class ASTLower implements NodeVisitor<InstPair> {
         tempInst = temp.end;
       }
       else{
-        System.out.println("check begin ");
-        System.out.println(temp);
-        System.out.println("check end ");
+        //System.out.println("check begin ");
+        //System.out.println(temp);
+        //System.out.println("check end ");
         tempInst.setNext(0, temp.start); //TODO some error here
         tempInst = temp.end;
       }
@@ -262,11 +262,13 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     List<LocalVar> args = new ArrayList<LocalVar>();
     int counter = 0;
     Instruction tempInst = head;
+    Instruction begin = head;
     for(Expression exp : call.getArguments()){
       var temp = exp.accept(this);
       args.add(temp.value);    //TODO i am not sure what LocalVal we should add into "args"
       if(counter == 0){
         head.setNext(0, temp.start);
+        begin = temp.start;
         tempInst = temp.end;
       }
       else{ //base case
@@ -286,7 +288,8 @@ public final class ASTLower implements NodeVisitor<InstPair> {
       myCallInst = new CallInst(dst, call.getCallee(), args);
 
     }
-    return new InstPair(head, myCallInst); //start and end
+    tempInst.setNext(0, myCallInst);
+    return new InstPair(begin, myCallInst); //start and end
   }
 
 
