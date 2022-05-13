@@ -45,31 +45,12 @@ class InstPair {
     value = null;
   }
 
-  public InstPair(NopInst n){
-    start = null;
-    end = null;
-    value = null;
-  }
-
-  public InstPair(LocalVar l){
-    start = null;
-    end = null;
-    value = l;
-  }
-
-  /*public InstPair(Instruction i, ReturnInst r){
-    start = i;
-    end = r;
-    value = null;
-  }*/
   public InstPair(LocalVar e, Instruction s){
     start = s;
     end = s;
     value = e; //
   }
-
 }
-
 
 
 /**
@@ -128,28 +109,19 @@ public final class ASTLower implements NodeVisitor<InstPair> {
   @Override
   public InstPair visit(StatementList statementList) {
     NopInst head = new NopInst();           //statmentlist is empty, juts nop
-    /*if(statementList == null){
-      return null;
-    }*/
-    int counter = 0;
-    Instruction tempInst = null;
     if(statementList.getChildren().size() == 0){
       return new InstPair(head);
     }
+    Instruction tempInst = head;
     for (var children : statementList.getChildren()){
       var temp = children.accept(this);
-      if (counter == 0) {
-        head.setNext(0, temp.start);      //safe checker
-        tempInst = temp.end;
-      }
-      else{
-        //System.out.println("check begin ");
-        //System.out.println(temp);
-        //System.out.println("check end ");
-        tempInst.setNext(0, temp.start); //TODO some error here
-        tempInst = temp.end;
-      }
-      counter++;
+      //System.out.println("Begin ---------- ");
+      //System.out.println(tempInst);
+      //System.out.println("End ----------- ");
+      //System.out.println();
+      tempInst.setNext(0, temp.start);
+      //TODO some error here, i tried to add a null checker for temp
+      tempInst = temp.end;
     }
     return new InstPair(head, tempInst);   //start and end
   }
@@ -201,8 +173,12 @@ public final class ASTLower implements NodeVisitor<InstPair> {
       //load is like getting the value to an address, such as x+1;
     }
     else{
-      InstPair temp = new InstPair(mCurrentLocalVarMap.get(name.getSymbol()));
+      AddressVar myDstVar =  mCurrentFunction.getTempAddressVar(name.getSymbol().getType());
+      //AddressAt addrAtInst = new AddressAt(myDstVar, name.getSymbol());
+      LocalVar myLocalVar = mCurrentLocalVarMap.get(name.getSymbol());
+      InstPair temp = new InstPair(new NopInst(), myLocalVar);
       return temp;
+      //TODO modified here
     }
   }
 
@@ -216,12 +192,12 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     Expression rhs = assignment.getValue();
     InstPair i = rhs.accept(this); //rhs
     boolean isArrayAccess = assignment.getLocation() instanceof ArrayAccess;
-    var s = (VarAccess) assignment.getLocation();
-    boolean isGlobalVarAccess = assignment.getLocation() instanceof VarAccess &&
-            (mCurrentLocalVarMap.get(s.getSymbol()) == null);
+
     if (isArrayAccess){
       LocalVar mySrcVal = i.value;
       AddressVar myDestAddr = mCurrentFunction.getTempAddressVar(assignment.getType());
+      //System.out.println(mySrcVal);
+      //System.out.println(myDestAddr);
       StoreInst storeInst = new StoreInst(mySrcVal, myDestAddr);
       Symbol sym = ((ArrayAccess)assignment.getLocation()).getBase(); //ArrayAccess
       AddressAt myAddressAt = new AddressAt(myDestAddr, sym);
@@ -231,7 +207,11 @@ public final class ASTLower implements NodeVisitor<InstPair> {
       InstPair result = new InstPair(myAddressAt, storeInst);
       return result;
     }
-    else if (isGlobalVarAccess){
+
+    Symbol mySymbol = ((VarAccess)assignment.getLocation()).getSymbol(); //VarAccess
+    //var s = (VarAccess) assignment.getLocation();
+    boolean isGlobalVarAccess = mCurrentLocalVarMap.get(mySymbol) == null; //(assignment.getLocation() instanceof VarAccess) &&
+    if (isGlobalVarAccess){
       LocalVar mySrcVal = i.value;
       AddressVar myDestAddr = mCurrentFunction.getTempAddressVar(assignment.getType());
       StoreInst storeInst = new StoreInst(mySrcVal, myDestAddr);
@@ -244,7 +224,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
       return result;
     }
     else{
-      LocalVar mySrcVal = mCurrentFunction.getTempVar(assignment.getType());
+      LocalVar mySrcVal = mCurrentLocalVarMap.get(mySymbol);
       CopyInst copyInst = new CopyInst(mySrcVal, i.value);
       i.end.setNext(0, copyInst);
       InstPair result = new InstPair(i.start, copyInst);
@@ -265,15 +245,18 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     Instruction begin = head;
     for(Expression exp : call.getArguments()){
       var temp = exp.accept(this);
-      args.add(temp.value);    //TODO i am not sure what LocalVal we should add into "args"
+      args.add(temp.value);
       if(counter == 0){
         head.setNext(0, temp.start);
         begin = temp.start;
         tempInst = temp.end;
+        //System.out.println("1");
+        //System.out.println(temp.start); //we have temp.value
       }
-      else{ //base case
+      else{
         tempInst.setNext(0, temp.start);
         tempInst = temp.end;
+        //System.out.println("2");
       }
       counter++;
     }
@@ -281,13 +264,16 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     CallInst myCallInst;
     FuncType myFuncType = (FuncType)call.getCallee().getType();
     if (myFuncType.getRet() instanceof VoidType){
-      myCallInst = new CallInst(call.getCallee(), args); //TODO some error here
-      //TODO
+      System.out.println("check begin ---");
+      System.out.println(call.getCallee());
+      System.out.println(args);
+      System.out.println("check ends ---");
+      myCallInst = new CallInst(call.getCallee(), args);
     } else {
       LocalVar dst = mCurrentFunction.getTempVar(myFuncType.getRet());
       myCallInst = new CallInst(dst, call.getCallee(), args);
-
     }
+    //TODO Error: tempInst is null :((
     tempInst.setNext(0, myCallInst);
     return new InstPair(begin, myCallInst); //start and end
   }
@@ -405,13 +391,17 @@ public final class ASTLower implements NodeVisitor<InstPair> {
       mCurrentLocalVarMap.put(access.getBase(), mCurrentFunction.getTempVar(myArrayType));
       AddressVar myDstVar =  mCurrentFunction.getTempAddressVar(access.getBase().getType());
       AddressAt addrAtInst = new AddressAt(myDstVar, access.getBase());
-      LoadInst myLoadInst = new LoadInst(mCurrentFunction.getTempVar(access.getType()), myDstVar);
+      var myLocalVar = mCurrentFunction.getTempVar(access.getType());
+      LoadInst myLoadInst = new LoadInst(myLocalVar, myDstVar);
       addrAtInst.setNext(0, myLoadInst);
-      return new InstPair(addrAtInst, myLoadInst);
+      return new InstPair(addrAtInst, myLoadInst, myLocalVar);
     }
     else{
-      InstPair temp = new InstPair(mCurrentLocalVarMap.get(access.getBase()));
+      AddressVar myDstVar =  mCurrentFunction.getTempAddressVar(access.getBase().getType());
+      AddressAt addrAtInst = new AddressAt(myDstVar, access.getBase());
+      InstPair temp = new InstPair(addrAtInst, mCurrentLocalVarMap.get(access.getBase()));
       return temp;
+      //TODO modified here
     }
     //return null;
   }
@@ -445,10 +435,11 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    */
   @Override
   public InstPair visit(Return ret) {
+    LocalVar retValue = mCurrentFunction.getTempVar(ret.getType());
     var temp = ret.getValue().accept(this);
-    ReturnInst myRetInst = new ReturnInst(temp.value);
+    ReturnInst myRetInst = new ReturnInst(retValue);
     temp.end.setNext(0, myRetInst);
-    return new InstPair(temp.start, myRetInst);
+    return new InstPair(temp.start, myRetInst); //TODO do we need to return the value?
   }
 
 
@@ -476,13 +467,21 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     var ifElse = ifElseBranch.getCondition().accept(this);
     InstPair init = new InstPair(ifElse.start); //TODO start?
     JumpInst myJumpInst = new JumpInst(ifElse.value);
-
-    var myElse = ifElseBranch.getElseBlock().accept(this);
+    init.end.setNext(0, myJumpInst);
+    InstPair myElse = new InstPair(new NopInst());
+    if(ifElseBranch.getElseBlock() != null){
+      myElse = ifElseBranch.getElseBlock().accept(this);
+    }
     var myThen = ifElseBranch.getThenBlock().accept(this);
     myJumpInst.setNext(0, myElse.start);
     myJumpInst.setNext(1, myThen.start);
     NopInst myExit = new NopInst();
-    myElse.end.setNext(0, myExit);
+    //System.out.println(myExit);
+    //System.out.println(myElse.end);
+    //System.out.println("endd");
+    if(myElse.end != null){
+      myElse.end.setNext(0, myExit);
+    }
     myThen.end.setNext(0, myExit);
     return new InstPair(init.start, myExit);
     //return null;
