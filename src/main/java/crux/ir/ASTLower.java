@@ -276,7 +276,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     }
     //TODO Error: tempInst is null :((
     tempInst.setNext(0, myCallInst);
-    return new InstPair(begin, myCallInst); //start and end
+    return new InstPair(head, myCallInst); //start and end
   }
 
 
@@ -392,23 +392,43 @@ public final class ASTLower implements NodeVisitor<InstPair> {
   @Override
   public InstPair visit(ArrayAccess access) {
     ArrayType myArrayType = (ArrayType) access.getBase().getType();
-    access.getIndex().accept(this);
-    var dst = mCurrentFunction.getTempAddressVar(myArrayType.getBase());
+    var myInstPair = access.getIndex().accept(this);
+    //var dst = mCurrentFunction.getTempAddressVar(myArrayType.getBase());
     //access's base is Symbol
-    if(mCurrentLocalVarMap.get(access.getBase()) == null){    //if not local, then is global
-      mCurrentLocalVarMap.put(access.getBase(), mCurrentFunction.getTempVar(myArrayType));
-      AddressVar myDstVar =  mCurrentFunction.getTempAddressVar(access.getBase().getType());
-      AddressAt addrAtInst = new AddressAt(myDstVar, access.getBase());
-      var myLocalVar = mCurrentFunction.getTempVar(access.getType());
-      LoadInst myLoadInst = new LoadInst(myLocalVar, myDstVar);
+
+    if(mCurrentLocalVarMap.get(access.getBase()) == null){    //if is global
+      System.out.println("Global test !!!");
+      var myLocalVar = mCurrentFunction.getTempVar(access.getBase().getType());
+      mCurrentLocalVarMap.put(access.getBase(), myLocalVar);
+      //AddressVar myDstVar =  mCurrentFunction.getTempAddressVar(access.getBase().getType());
+      //AddressAt aa = new AddressAt()
+      AddressVar myDstVar = mCurrentFunction.getTempAddressVar(access.getBase().getType());
+      System.out.println("check begin ---");
+      System.out.println(myInstPair);
+      System.out.println(myInstPair.value);
+      System.out.println(myLocalVar);
+      System.out.println(myDstVar);
+      System.out.println(access.getBase().toString());
+      System.out.println(access.getIndex().toString());
+      System.out.println("check end ----");
+      var temp = mCurrentFunction.getTempVar(access.getType());
+      AddressAt addrAtInst = new AddressAt(myDstVar, access.getBase(), myLocalVar);
+      myInstPair.end.setNext(0, addrAtInst);
+      //LoadInst myLoadInst = new LoadInst(myLocalVar, myDstVar);
+      LoadInst myLoadInst = new LoadInst(temp, myDstVar);
       addrAtInst.setNext(0, myLoadInst);
-      return new InstPair(addrAtInst, myLoadInst, myLocalVar);
+      return new InstPair(myInstPair.start, myLoadInst, temp);
     }
-    else{
+    else{ //if is local
+      System.out.println("Local test !!!");
+      var myLocalVar = mCurrentFunction.getTempVar(access.getBase().getType());
+      var temp = mCurrentFunction.getTempVar(access.getType());
       AddressVar myDstVar =  mCurrentFunction.getTempAddressVar(access.getBase().getType());
-      AddressAt addrAtInst = new AddressAt(myDstVar, access.getBase());
-      InstPair temp = new InstPair(addrAtInst, mCurrentLocalVarMap.get(access.getBase()));
-      return temp;
+      AddressAt addrAtInst = new AddressAt(myDstVar, access.getBase(), myLocalVar);
+      myInstPair.end.setNext(0, addrAtInst);
+      LoadInst myLoadInst = new LoadInst(temp, myDstVar);
+      addrAtInst.setNext(0, myLoadInst);
+      return new InstPair(myInstPair.start, myLoadInst, temp);
       //TODO modified here
     }
     //return null;
@@ -454,14 +474,13 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    */
   @Override
   public InstPair visit(Break brk) {
-    NopInst myExit = new NopInst();
-    record.push(myExit);
+    var myLoopExit = record.pop();
     List<Node> brkChildren = brk.getChildren();
     for(Node e : brkChildren){
       e.accept(this);  //TODO ?
     }
-    record.pop();
-    return null;
+    //record.pop();
+    return new InstPair(myLoopExit, new NopInst());
   }
 
   /**
@@ -518,7 +537,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     myJump.setNext(1, myBody.start);
     myBody.end.setNext(0, myIncre.start);
     myIncre.end.setNext(0, myCond.start);
-    record.pop(); //what is the purpose of this?
+    //record.pop(); //what is the purpose of this?
     return new InstPair(myInit.start, myExit);
   }
 }
