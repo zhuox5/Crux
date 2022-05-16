@@ -45,11 +45,7 @@ class InstPair {
     value = null;
   }
 
-  public InstPair(LocalVar e, Instruction s){
-    start = s;
-    end = s;
-    value = e; //
-  }
+
 }
 
 
@@ -192,45 +188,47 @@ public final class ASTLower implements NodeVisitor<InstPair> {
   public InstPair visit(Assignment assignment) {
     Expression lhs = assignment.getLocation();
     Expression rhs = assignment.getValue();
-    InstPair i = rhs.accept(this); //rhs
     boolean isArrayAccess = assignment.getLocation() instanceof ArrayAccess;
 
     if (isArrayAccess){
-      LocalVar mySrcVal = i.value;
+      Symbol sym = ((ArrayAccess)assignment.getLocation()).getBase();   //ArrayAccess
+      InstPair myIndex = ((ArrayAccess) assignment.getLocation()).getIndex().accept(this);
       AddressVar myDestAddr = mCurrentFunction.getTempAddressVar(assignment.getType());
-      //AddressVar myDestAddr = new AddressVar(mySrcVal, assignment.getType());
+      InstPair i = rhs.accept(this); //rhs
+      LocalVar mySrcVal = i.value;
+      StoreInst storeInst = new StoreInst(mySrcVal, myDestAddr);
+      AddressAt myAddressAt = new AddressAt(myDestAddr, sym, myIndex.value);
       System.out.println("---------AddressVar Assignment ------");
       System.out.println(myDestAddr);
       System.out.println(mySrcVal);
-      //System.out.println(myDestAddr);
-      StoreInst storeInst = new StoreInst(mySrcVal, myDestAddr);
-      Symbol sym = ((ArrayAccess)assignment.getLocation()).getBase(); //ArrayAccess
-      AddressAt myAddressAt = new AddressAt(myDestAddr, sym, mySrcVal);
-      //use index
-      myAddressAt.setNext(0, i.start);
-      i.end.setNext(0, storeInst);
-      return new InstPair(myAddressAt, storeInst);
+      System.out.println(myDestAddr);
+      System.out.println(myIndex.value);
+      myIndex.end.setNext(0, i.start);
+      i.end.setNext(0, myAddressAt);
+      myAddressAt.setNext(0, storeInst);
+      return new InstPair(myIndex.start, storeInst);
     }
 
     Symbol mySymbol = ((VarAccess)assignment.getLocation()).getSymbol(); //VarAccess
     //var s = (VarAccess) assignment.getLocation();
     boolean isGlobalVarAccess = mCurrentLocalVarMap.get(mySymbol) == null; //(assignment.getLocation() instanceof VarAccess) &&
     if (isGlobalVarAccess){
+      InstPair i = rhs.accept(this); //rhs
       LocalVar mySrcVal = i.value;
       AddressVar myDestAddr = mCurrentFunction.getTempAddressVar(assignment.getType());
       StoreInst storeInst = new StoreInst(mySrcVal, myDestAddr);
       Symbol sym = ((VarAccess)assignment.getLocation()).getSymbol(); //VarAccess
-      AddressAt myAddressAt = new AddressAt(myDestAddr, sym); //TODO I don't add LocalVar here
+      AddressAt myAddressAt = new AddressAt(myDestAddr, sym);
       myAddressAt.setNext(0, i.start);
       i.end.setNext(0, storeInst);
       return new InstPair(myAddressAt, storeInst);
     }
     else{
       LocalVar mySrcVal = mCurrentLocalVarMap.get(mySymbol);
+      InstPair i = rhs.accept(this); //rhs
       CopyInst copyInst = new CopyInst(mySrcVal, i.value);
       i.end.setNext(0, copyInst);
-      InstPair result = new InstPair(i.start, copyInst);
-      return result;
+      return new InstPair(i.start, copyInst);
     }
   }
 
@@ -363,7 +361,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
         myThenBranch.setNext(0, myMergeInst);
         CopyInst myLastInst = new CopyInst(myLocalVar, rhs.value);
         myThenBranch.setNext(0, myLastInst);
-        return new InstPair(myLocalVar, myCopyInst); //TODO
+        return new InstPair(myCopyInst, myCopyInst, myLocalVar); //TODO
       }
       else{
         //var t = mCurrentFunction.getTempVar(operation.getType());
@@ -375,7 +373,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
         myCopyInst.setNext(0, myMergeInst);
         myJump.setNext(1, myThenBranch);
         myThenBranch.setNext(0, new CopyInst(myLocalVar, lhs.value));
-        return new InstPair(myLocalVar, myCopyInst); //TODO
+        return new InstPair(myCopyInst, myCopyInst, myLocalVar); //TODO
       }
 
     }
@@ -394,49 +392,24 @@ public final class ASTLower implements NodeVisitor<InstPair> {
   public InstPair visit(ArrayAccess access) {
     ArrayType myArrayType = (ArrayType) access.getBase().getType();
     InstPair myInstPair = access.getIndex().accept(this);
-    //var dst = mCurrentFunction.getTempAddressVar(myArrayType.getBase());
     //access's base is Symbol
     System.out.println();
-    if(mCurrentLocalVarMap.get(access.getBase()) == null){    //if is global
       System.out.println("Global test !!!");
       System.out.println();
-      var myLocalVar = mCurrentFunction.getTempVar(access.getBase().getType());
-      mCurrentLocalVarMap.put(access.getBase(), myLocalVar);
-      //AddressVar myDstVar =  mCurrentFunction.getTempAddressVar(access.getBase().getType());
-      //AddressAt aa = new AddressAt()
       AddressVar myDstVar = mCurrentFunction.getTempAddressVar(access.getBase().getType());
+
+      var temp = mCurrentFunction.getTempVar(access.getType());
+      AddressAt addrAtInst = new AddressAt(myDstVar, access.getBase(), myInstPair.value);
+      myInstPair.end.setNext(0, addrAtInst);
+      LoadInst myLoadInst = new LoadInst(temp, myDstVar);
       System.out.println("check begin ------------");
-      System.out.println(myInstPair);
       System.out.println(myInstPair.value);
-      System.out.println(myLocalVar);
       System.out.println(myDstVar);
-      System.out.println(access.getBase().toString());
-      System.out.println(access.getIndex().toString());
+      System.out.println(temp);
       System.out.println("check end ------------");
-      System.out.println();
-
-      var temp = mCurrentFunction.getTempVar(access.getType());
-      AddressAt addrAtInst = new AddressAt(myDstVar, access.getBase(), myLocalVar);
-      myInstPair.end.setNext(0, addrAtInst);
-      //LoadInst myLoadInst = new LoadInst(myLocalVar, myDstVar);
-      LoadInst myLoadInst = new LoadInst(temp, myDstVar);
       addrAtInst.setNext(0, myLoadInst);
       return new InstPair(myInstPair.start, myLoadInst, temp);
-    }
-    else{ //if is local
-      System.out.println("Local test !!!");
-      System.out.println();
 
-      var myLocalVar = mCurrentFunction.getTempVar(access.getBase().getType());
-      var temp = mCurrentFunction.getTempVar(access.getType());
-      AddressVar myDstVar =  mCurrentFunction.getTempAddressVar(access.getBase().getType());
-      AddressAt addrAtInst = new AddressAt(myDstVar, access.getBase(), myLocalVar);
-      myInstPair.end.setNext(0, addrAtInst);
-      LoadInst myLoadInst = new LoadInst(temp, myDstVar);
-      addrAtInst.setNext(0, myLoadInst);
-      return new InstPair(myInstPair.start, myLoadInst, temp);
-    }
-    //return null;
   }
 
   /**
@@ -447,7 +420,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     BooleanConstant myBoolVal = BooleanConstant.get(mCurrentProgram, literalBool.getValue());
     var dest = mCurrentFunction.getTempVar(new BoolType());
     var copyInst = new CopyInst(dest, myBoolVal);
-    return new InstPair(dest, copyInst);
+    return new InstPair(copyInst, copyInst, dest);
   }
 
   /**
@@ -460,7 +433,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     IntegerConstant myIntVal = IntegerConstant.get(mCurrentProgram, literalInt.getValue());
     var dest = mCurrentFunction.getTempVar(new IntType());
     var copyInst = new CopyInst(dest, myIntVal);
-    return new InstPair(dest, copyInst);
+    return new InstPair(copyInst, copyInst, dest);
   }
 
   /**
@@ -469,6 +442,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
   @Override
   public InstPair visit(Return ret) {
     LocalVar retValue = mCurrentFunction.getTempVar(ret.getType());
+    //ret.accept(this);
     var temp = ret.getValue().accept(this);
     ReturnInst myRetInst = new ReturnInst(retValue);
     temp.end.setNext(0, myRetInst);
