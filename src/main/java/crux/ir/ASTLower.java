@@ -277,7 +277,9 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     }
     //TODO Error: tempInst is null :((
     tempInst.setNext(0, myCallInst);
-    return new InstPair(head, myCallInst); //start and end
+    var temp = mCurrentFunction.getTempVar(myFuncType);
+    return new InstPair(head, myCallInst, temp); //start and end
+    //TODO modified here!
   }
 
 
