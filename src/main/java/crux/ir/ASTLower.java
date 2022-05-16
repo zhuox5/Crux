@@ -162,7 +162,6 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     if(mCurrentLocalVarMap.get(name.getSymbol()) == null){    //if not local, then is global
       mCurrentLocalVarMap.put(name.getSymbol(), mCurrentFunction.getTempVar(name.getSymbol().getType()));
       AddressVar myDstVar =  mCurrentFunction.getTempAddressVar(name.getSymbol().getType());
-      //TODO get symbol or not?
       AddressAt addrAtInst = new AddressAt(myDstVar, name.getSymbol());
       //System.out.println("AddressAt is : ---");
       //System.out.println(addrAtInst);
@@ -215,7 +214,11 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     if (isGlobalVarAccess){
       InstPair i = rhs.accept(this); //rhs
       LocalVar mySrcVal = i.value;
-      AddressVar myDestAddr = mCurrentFunction.getTempAddressVar(assignment.getType());
+      AddressVar myDestAddr = mCurrentFunction.getTempAddressVar(((VarAccess)assignment.getLocation()).getType());
+      System.out.println("Assignment ------------------------");
+      System.out.println(i.start);
+      System.out.println(mySrcVal);
+      System.out.println(myDestAddr);
       StoreInst storeInst = new StoreInst(mySrcVal, myDestAddr);
       Symbol sym = ((VarAccess)assignment.getLocation()).getSymbol(); //VarAccess
       AddressAt myAddressAt = new AddressAt(myDestAddr, sym);
@@ -238,7 +241,6 @@ public final class ASTLower implements NodeVisitor<InstPair> {
   @Override
   public InstPair visit(Call call) {
     NopInst head = new NopInst();
-    //AddressVar myCalleeAddress = mCurrentFunction.getTempAddressVar(call.getCallee().getType());
     List<LocalVar> args = new ArrayList<LocalVar>();
     int counter = 0;
     Instruction tempInst = head;
@@ -250,13 +252,10 @@ public final class ASTLower implements NodeVisitor<InstPair> {
         head.setNext(0, temp.start);
         begin = temp.start;
         tempInst = temp.end;
-        //System.out.println("1");
-        //System.out.println(temp.start); //we have temp.value
       }
       else{
         tempInst.setNext(0, temp.start);
         tempInst = temp.end;
-        //System.out.println("2");
       }
       counter++;
     }
@@ -264,10 +263,13 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     CallInst myCallInst;
     FuncType myFuncType = (FuncType)call.getCallee().getType();
     if (myFuncType.getRet() instanceof VoidType){
+      /*
       //System.out.println("check begin ---");
       //System.out.println(call.getCallee());
       //System.out.println(args);
       //System.out.println("check ends ---");
+
+       */
       myCallInst = new CallInst(call.getCallee(), args);
     } else {
       LocalVar dst = mCurrentFunction.getTempVar(myFuncType.getRet());
@@ -392,24 +394,22 @@ public final class ASTLower implements NodeVisitor<InstPair> {
   public InstPair visit(ArrayAccess access) {
     ArrayType myArrayType = (ArrayType) access.getBase().getType();
     InstPair myInstPair = access.getIndex().accept(this);
-    //access's base is Symbol
+    System.out.println("ArrayAccess test !!! ------------ ");
     System.out.println();
-      System.out.println("Global test !!!");
-      System.out.println();
-      AddressVar myDstVar = mCurrentFunction.getTempAddressVar(access.getBase().getType());
+    //AddressVar myDstVar = mCurrentFunction.getTempAddressVar(access.getBase().getType());
+    AddressVar myDstVar = mCurrentFunction.getTempAddressVar(access.getType());
 
-      var temp = mCurrentFunction.getTempVar(access.getType());
-      AddressAt addrAtInst = new AddressAt(myDstVar, access.getBase(), myInstPair.value);
-      myInstPair.end.setNext(0, addrAtInst);
-      LoadInst myLoadInst = new LoadInst(temp, myDstVar);
-      System.out.println("check begin ------------");
-      System.out.println(myInstPair.value);
-      System.out.println(myDstVar);
-      System.out.println(temp);
-      System.out.println("check end ------------");
-      addrAtInst.setNext(0, myLoadInst);
-      return new InstPair(myInstPair.start, myLoadInst, temp);
-
+    var temp = mCurrentFunction.getTempVar(access.getType()); //TODO some error here
+    AddressAt addrAtInst = new AddressAt(myDstVar, access.getBase(), myInstPair.value);
+    myInstPair.end.setNext(0, addrAtInst);
+    LoadInst myLoadInst = new LoadInst(temp, myDstVar);
+    System.out.println("check begin ------------");
+    System.out.println(myInstPair.value);
+    System.out.println(myDstVar);
+    System.out.println(temp);
+    System.out.println("check end ------------");
+    addrAtInst.setNext(0, myLoadInst);
+    return new InstPair(myInstPair.start, myLoadInst, temp);
   }
 
   /**
