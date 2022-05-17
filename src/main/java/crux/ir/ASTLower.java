@@ -299,7 +299,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     else {
       lhs = operation.getLeft().accept(this);
       LocalVar myLocalVar = mCurrentFunction.getTempVar(operation.getType());
-      UnaryNotInst myUnaryNotInst = new UnaryNotInst(myLocalVar, mCurrentFunction.getTempVar(operation.getType()));
+      UnaryNotInst myUnaryNotInst = new UnaryNotInst(myLocalVar, lhs.value);
       lhs.end.setNext(0, myUnaryNotInst);
       return new InstPair(lhs.start, myUnaryNotInst, myLocalVar);
     }
@@ -350,7 +350,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
       rhs.end.setNext(0, myOpInst);
       return new InstPair(lhs.start, myOpInst, myLocalVar);
     }
-    else if(myBoolOp.equals("&&") || myBoolOp.equals("||")){
+    else if(myBoolOp != null && (myBoolOp.equals("&&") || myBoolOp.equals("||"))){
 
       JumpInst myJump;
 
@@ -475,9 +475,9 @@ public final class ASTLower implements NodeVisitor<InstPair> {
   @Override
   public InstPair visit(IfElseBranch ifElseBranch) {
     var ifElse = ifElseBranch.getCondition().accept(this);
-    InstPair init = new InstPair(ifElse.start); //TODO start?
+    //InstPair init = new InstPair(ifElse.start);
     JumpInst myJumpInst = new JumpInst(ifElse.value);
-    init.end.setNext(0, myJumpInst);
+    ifElse.end.setNext(0, myJumpInst);
     InstPair myElse = ifElseBranch.getElseBlock().accept(this);
     InstPair myThen = ifElseBranch.getThenBlock().accept(this);
     myJumpInst.setNext(0, myElse.start);
@@ -487,7 +487,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
     myJumpInst.setNext(1, myThen.start);
     myThen.end.setNext(0, myExit);
 
-    return new InstPair(init.start, myExit);
+    return new InstPair(ifElse.start, myExit);
     //return null;
   }
 
