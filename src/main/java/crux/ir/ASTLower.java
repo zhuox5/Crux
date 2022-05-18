@@ -367,21 +367,22 @@ public final class ASTLower implements NodeVisitor<InstPair> {
         NopInst myMergeInst = new NopInst();
         myCopyInst0.setNext(0, myMergeInst);
         myCopyInst1.setNext(0, myMergeInst);
-        return new InstPair(lhs.start, myMergeInst, myLocalVar); //TODO
+        return new InstPair(lhs.start, myMergeInst, myLocalVar);
       }
-      else{
+      else{ //"||"
         LocalVar myLocalVar = mCurrentFunction.getTempVar(operation.getType());
         myJump = new JumpInst(lhs.value);
         lhs.end.setNext(0, myJump);
-        CopyInst myCopyInst0 = new CopyInst(myLocalVar, rhs.value); //rhs here
-        CopyInst myCopyInst1 = new CopyInst(myLocalVar, lhs.value); //lhs here
-        NopInst myMergeInst = new NopInst();
-        rhs.end.setNext(0, myCopyInst0);
+        CopyInst myCopyInst0 = new CopyInst(myLocalVar, lhs.value);
+        CopyInst myCopyInst1 = new CopyInst(myLocalVar, rhs.value);
         myJump.setNext(0, rhs.start);
-        myJump.setNext(1, myCopyInst1);
+        myJump.setNext(1, myCopyInst0);
+        NopInst myMergeInst = new NopInst();;
+        rhs.end.setNext(0, myCopyInst1);
         myCopyInst0.setNext(0, myMergeInst);
-        myCopyInst0.setNext(1, myMergeInst);
-        return new InstPair(lhs.start, myMergeInst, myLocalVar); //TODO
+        myCopyInst1.setNext(0, myMergeInst);
+
+        return new InstPair(lhs.start, myMergeInst, myLocalVar);
       }
 
     }
