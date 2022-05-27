@@ -2,9 +2,20 @@ package crux.backend;
 
 import java.util.*;
 import java.io.*;
+import crux.printing.IRValueFormatter;
 
 public class CodePrinter {
   PrintStream out;
+  public StringBuffer myStringBuffer = new StringBuffer();
+
+  public void bufferCode(String s){
+    myStringBuffer.append("    " + s + "\n");
+  }
+
+  public void printBuffer(){
+    out.print(myStringBuffer);
+    myStringBuffer = new StringBuffer();//init it each time after print
+  }
 
   public CodePrinter(String name) {
     try {
@@ -26,4 +37,5 @@ public class CodePrinter {
   public void close() {
     out.close();
   }
+
 }
