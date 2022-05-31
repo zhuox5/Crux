@@ -300,8 +300,9 @@ public final class CodeGen extends InstVisitor {
     dst *= -8;
     if(srcval instanceof IntegerConstant){
       //TODO error
-      out.printCode("movq " + "$" + ((IntegerConstant)srcval).getValue() + ", " + "%r10");
-      out.printCode("movq %r10, " + dst + "(%rbp)");
+      //out.printCode("movq " + "$" + ((IntegerConstant)srcval).getValue() + ", " + "%r10");
+      //out.printCode("movq %r10, " + dst + "(%rbp)");
+      out.printCode("movq " + "$" + ((IntegerConstant)srcval).getValue() + ", " + dst + "(%rbp)");
     }
     else if(srcval instanceof BooleanConstant){
       if(((BooleanConstant) srcval).getValue()){
