@@ -436,10 +436,12 @@ public final class CodeGen extends InstVisitor {
       int pos = 0;
       if(!varIndexMap.containsKey(param)){
         varIndexMap.put(param, numLocalVar);
-        pos = ++numLocalVar;
+        numLocalVar++;
+        pos = numLocalVar;
       }
       else{
         pos = varIndexMap.get(param);
+        pos++;
       }
       pos *= -8;
       //out.printCode(" ------- " + pos);
