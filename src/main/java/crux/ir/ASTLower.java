@@ -163,9 +163,9 @@ public final class ASTLower implements NodeVisitor<InstPair> {
       //mCurrentLocalVarMap.put(name.getSymbol(), mCurrentFunction.getTempVar(name.getSymbol().getType()));
       AddressVar myDstVar =  mCurrentFunction.getTempAddressVar(name.getSymbol().getType());
       AddressAt addrAtInst = new AddressAt(myDstVar, name.getSymbol());
-      System.out.println("check begin ------------");
-      System.out.println(myDstVar);
-      System.out.println("check end ------------");
+      //System.out.println("check begin ------------");
+      //System.out.println(myDstVar);
+      //System.out.println("check end ------------");
       LocalVar myLocalVar = mCurrentFunction.getTempVar(name.getType()); //TODO error
       LoadInst myLoadInst = new LoadInst(myLocalVar, myDstVar);
       addrAtInst.setNext(0, myLoadInst);
@@ -433,8 +433,8 @@ public final class ASTLower implements NodeVisitor<InstPair> {
    */
   @Override
   public InstPair visit(LiteralInt literalInt) {
-    System.out.println("---------------------- LiteralInt ----------------------");
-    System.out.println(literalInt.getValue());
+    //System.out.println("---------------------- LiteralInt ----------------------");
+    //System.out.println(literalInt.getValue());
     IntegerConstant myIntVal = IntegerConstant.get(mCurrentProgram, literalInt.getValue());
     var myLocalVar = mCurrentFunction.getTempVar(new IntType());
     var copyInst = new CopyInst(myLocalVar, myIntVal);
