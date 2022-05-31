@@ -139,15 +139,40 @@ public final class CodeGen extends InstVisitor {
   public void visit(AddressAt i) {
     printInstructionInfor(i);
     Symbol src = i.getBase();
-    //String dst = i.getDst().getName();
-    if(i.getOffset() == null){
-      out.printCode("movq " + src.getName() + "@GOTPCREL(%rip), %r11");
-      out.printCode("movq %r11, " + i.getDst().getName() + " (%rbp)");
+    int dst = 0;
+    if(varIndexMap.containsKey(i.getDst())){
+      dst = varIndexMap.get(i.getDst());
     }
     else{
+      varIndexMap.put(i.getDst(), numLocalVar);
+      numLocalVar++;
+      dst = numLocalVar;
+
+    }
+    dst *= -8;
+
+    int offset = 0;
+    if(varIndexMap.containsKey(i.getOffset())){
+      offset = varIndexMap.get(i.getOffset());
+    }
+    else{
+      varIndexMap.put(i.getOffset(), numLocalVar);
+      numLocalVar++;
+      offset = numLocalVar;
+
+    }
+    dst *= -8;
+
+    if(i.getOffset() == null){
+      out.printCode("movq " + src.getName() + "@GOTPCREL(%rip), %r11");
+      out.printCode("movq %r11, " + dst + " (%rbp)");
+    }
+    else{
+      out.printCode("movq " + offset + "(%rbp), %r11");
       out.printCode("imulq $8, %r10");
       out.printCode("movq " + src.getName() + "@GOTPCREL(%rip), %r10");
       out.printCode("addq %r10, %r11");
+      out.printCode("movq %r11, " + dst + "(%rbp)");
     }
   }
 
@@ -204,16 +229,17 @@ public final class CodeGen extends InstVisitor {
       }
     }
 
-    int dst;
+    int dst = 0;
     if(varIndexMap.containsKey(i.getDst())){
       dst = varIndexMap.get(i.getDst());
     }
     else{
       varIndexMap.put(i.getDst(), numLocalVar);
-      dst = ++numLocalVar;
+      numLocalVar++;
+      dst = numLocalVar;
     }
     dst *= -8;
-    //out.printCode("test ---- " + dst); //TODO
+
     out.printCode("movq %r10, "+ dst + "(%rbp)");
   }
 
@@ -414,7 +440,6 @@ public final class CodeGen extends InstVisitor {
   public void visit(ReturnInst i) {
     printInstructionInfor(i);
     int ret = 0;
-
     if(varIndexMap.containsKey(i.getReturnValue())){
       ret = varIndexMap.get(i.getReturnValue());
     }
@@ -433,6 +458,7 @@ public final class CodeGen extends InstVisitor {
     printInstructionInfor(i);
     for(int j=0; j<i.getParams().size(); j++){
       var param = i.getParams().get(j);
+      //out.printCode("dddddd: ---- " + param);
       int pos = 0;
       if(!varIndexMap.containsKey(param)){
         varIndexMap.put(param, numLocalVar);
@@ -441,10 +467,8 @@ public final class CodeGen extends InstVisitor {
       }
       else{
         pos = varIndexMap.get(param);
-        pos++;
       }
       pos *= -8;
-      //out.printCode(" ------- " + pos);
 
       if(j==0){
         out.printCode("movq " + pos + "(%rbp), %rdi");
