@@ -282,18 +282,19 @@ public final class CodeGen extends InstVisitor {
   public void visit(CopyInst i) {
     printInstructionInfor(i);
     var srcval = i.getSrcValue();
-    int dst;
+    int dst = 0;
 
     if(varIndexMap.containsKey(i.getDstVar().toString())){
       dst = varIndexMap.get(i.getDstVar().toString());
     }
     else{
       varIndexMap.put(i.getDstVar().toString(), numLocalVar);
-      numLocalVar++;
       dst = numLocalVar;
+      numLocalVar++;
     }
     dst *= -8;
     if(srcval instanceof IntegerConstant){
+      //TODO error
       out.printCode("movq " + "$" + ((IntegerConstant)srcval).getValue() + ", " + "%r10");
       out.printCode("movq %r10, " + dst + "(%rbp)");
     }
@@ -437,7 +438,8 @@ public final class CodeGen extends InstVisitor {
       else{
         pos = varIndexMap.get(param.toString());
       }
-      pos = pos * (-8);
+      pos *= -8;
+      //out.printCode(" ------- " + pos);
 
       if(j==0){
         out.printCode("movq " + pos + "(%rbp), %rdi");
@@ -477,7 +479,7 @@ public final class CodeGen extends InstVisitor {
         }
         stackPos *= -8;
         out.printCode("movq " + stackPos + "(%rbp), %r10");
-        out.printCode("movq %r10, " + (numLocalVar++)*(-8) + "(%rbp)");
+        out.printCode("movq %r10, " + (numLocalVar++)*(-8) + "(%rbp)"); //modified here
       }
     }
   }
@@ -506,7 +508,6 @@ public final class CodeGen extends InstVisitor {
       inner = numLocalVar;
     }
     inner *= -8;
-
     out.printCode("movq " + inner + "(%rbp), %r10");
     out.printCode("not %r10");
     out.printCode("movq %r10, " + dst + "(%rbp)");
