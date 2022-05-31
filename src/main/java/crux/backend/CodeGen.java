@@ -87,6 +87,7 @@ public final class CodeGen extends InstVisitor {
     /**
      * Generate Body
      **/
+    numLocalVar = f.getNumTempVars() + f.getNumTempAddressVars();
     if(numLocalVar % 2 != 0){
       numLocalVar++;           //if uneven
     }
