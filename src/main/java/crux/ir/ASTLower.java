@@ -165,7 +165,7 @@ public final class ASTLower implements NodeVisitor<InstPair> {
       AddressAt addrAtInst = new AddressAt(myDstVar, name.getSymbol());
       //System.out.println("check begin ------------");
       //System.out.println(myDstVar);
-      //System.out.println("check end ------------");
+      //fSystem.out.println("check end ------------");
       LocalVar myLocalVar = mCurrentFunction.getTempVar(name.getType()); //TODO error
       LoadInst myLoadInst = new LoadInst(myLocalVar, myDstVar);
       addrAtInst.setNext(0, myLoadInst);

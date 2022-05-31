@@ -16,7 +16,7 @@ public final class CodeGen extends InstVisitor {
   private final CodePrinter out;
 
   //private boolean intelMac = false;
-  private HashMap<String, Integer> varIndexMap = new HashMap<>();
+  private HashMap<Variable, Integer> varIndexMap = new HashMap<>();
   private int numslots = 0;
   private HashMap<Instruction, String> myLableMap;
 
@@ -80,6 +80,7 @@ public final class CodeGen extends InstVisitor {
         out.printCode("movq %r9, -48(%rbp)");
       } else {
         out.printCode("push " + myLocalVar.getName());
+        //TODO
       }
       argIndex++;
     }
@@ -138,10 +139,11 @@ public final class CodeGen extends InstVisitor {
   public void visit(AddressAt i) {
     printInstructionInfor(i);
     Symbol src = i.getBase();
-    AddressVar dst = i.getDst();
+    //String dst = i.getDst().getName();
     if(i.getOffset() == null){
       out.printCode("movq " + src.getName() + "@GOTPCREL(%rip), %r11");
-      out.printCode("movq %r11, " + dst + " (%rbp)");
+      out.printCode("movq %r11, " + i.getDst().toString().substring(0,2)+
+              i.getDst().toString().substring(3)+ " (%rbp)");
     }
     else{
       out.printCode("imulq $8, %r10");
@@ -161,26 +163,26 @@ public final class CodeGen extends InstVisitor {
       out.printCode("/* BinaryOperator: "+ op + "*/");
     }
     else{
-      op = "No such operator"; //safe checker
+      op = "No such operator"; //safe checker, should not reach here
       out.printCode(op);
     }
     int left;
     int right;
-    if(varIndexMap.containsKey(i.getLeftOperand().getName())){
-      left = varIndexMap.get(i.getLeftOperand().getName());
+    if(varIndexMap.containsKey(i.getLeftOperand())){
+      left = varIndexMap.get(i.getLeftOperand());
     }
     else{
-      varIndexMap.put(i.getLeftOperand().getName(), numLocalVar);
+      varIndexMap.put(i.getLeftOperand(), numLocalVar);
       numLocalVar++;
       left = numLocalVar;
     }
     left *= -8;
 
-    if(varIndexMap.containsKey(i.getRightOperand().getName())){
-      right = varIndexMap.get(i.getRightOperand().getName());
+    if(varIndexMap.containsKey(i.getRightOperand())){
+      right = varIndexMap.get(i.getRightOperand());
     }
     else{
-      varIndexMap.put(i.getRightOperand().getName(), numLocalVar);
+      varIndexMap.put(i.getRightOperand(), numLocalVar);
       numLocalVar++;
       right = numLocalVar;
     }
@@ -204,13 +206,12 @@ public final class CodeGen extends InstVisitor {
     }
 
     int dst;
-    if(varIndexMap.containsKey(i.getDst().getName())){
-      dst = varIndexMap.get(i.getDst().getName());
+    if(varIndexMap.containsKey(i.getDst())){
+      dst = varIndexMap.get(i.getDst());
     }
     else{
-      varIndexMap.put(i.getDst().getName(), numLocalVar);
-      dst = numLocalVar;
-      numLocalVar++;
+      varIndexMap.put(i.getDst(), numLocalVar);
+      dst = ++numLocalVar;
     }
     dst *= -8;
     //out.printCode("test ---- " + dst); //TODO
@@ -222,21 +223,21 @@ public final class CodeGen extends InstVisitor {
     out.printCode("/* BinaryOperator */ ");
     int left;
     int right;
-    if(varIndexMap.containsKey(i.getLeftOperand().getName())){
-      left = varIndexMap.get(i.getLeftOperand().getName());
+    if(varIndexMap.containsKey(i.getLeftOperand())){
+      left = varIndexMap.get(i.getLeftOperand());
     }
     else{
-      varIndexMap.put(i.getLeftOperand().getName(), numLocalVar);
+      varIndexMap.put(i.getLeftOperand(), numLocalVar);
       numLocalVar++;
       left = numLocalVar;
     }
     left *= -8;
 
-    if(varIndexMap.containsKey(i.getRightOperand().getName())){
-      right = varIndexMap.get(i.getRightOperand().getName());
+    if(varIndexMap.containsKey(i.getRightOperand())){
+      right = varIndexMap.get(i.getRightOperand());
     }
     else{
-      varIndexMap.put(i.getRightOperand().getName(), numLocalVar);
+      varIndexMap.put(i.getRightOperand(), numLocalVar);
       numLocalVar++;
       right = numLocalVar;
     }
@@ -268,11 +269,11 @@ public final class CodeGen extends InstVisitor {
     out.printCode("cmov" + myPredicate + " %r10, %r11");
 
     int dst;
-    if(varIndexMap.containsKey(i.getDst().getName())){
-      dst = varIndexMap.get(i.getDst().getName());
+    if(varIndexMap.containsKey(i.getDst())){
+      dst = varIndexMap.get(i.getDst());
     }
     else{
-      varIndexMap.put(i.getDst().getName(), numLocalVar);
+      varIndexMap.put(i.getDst(), numLocalVar);
       numLocalVar++;
       dst = numLocalVar;
     }
@@ -286,13 +287,12 @@ public final class CodeGen extends InstVisitor {
     var srcval = i.getSrcValue();
     int dst = 0;
 
-    if(varIndexMap.containsKey(i.getDstVar().toString())){
-      dst = varIndexMap.get(i.getDstVar().toString());
+    if(varIndexMap.containsKey(i.getDstVar())){
+      dst = varIndexMap.get(i.getDstVar());
     }
     else{
-      varIndexMap.put(i.getDstVar().toString(), numLocalVar);
-      dst = numLocalVar;
-      numLocalVar++;
+      varIndexMap.put(i.getDstVar(), numLocalVar);
+      dst = ++numLocalVar;
     }
     dst *= -8;
     if(srcval instanceof IntegerConstant){
@@ -312,13 +312,13 @@ public final class CodeGen extends InstVisitor {
 
     }
     else if(srcval instanceof LocalVar){
-      String myLocalvarName = ((LocalVar) srcval).getName();
+      var myLocalvar = ((LocalVar) srcval);
       int src;
-      if(varIndexMap.containsKey(myLocalvarName)){
-        src = varIndexMap.get(myLocalvarName);
+      if(varIndexMap.containsKey(myLocalvar)){
+        src = varIndexMap.get(myLocalvar);
       }
       else{
-        varIndexMap.put(myLocalvarName, numLocalVar);
+        varIndexMap.put(myLocalvar, numLocalVar);
         numLocalVar++;
         src = numLocalVar;
       }
@@ -331,11 +331,11 @@ public final class CodeGen extends InstVisitor {
   public void visit(JumpInst i) {
     printInstructionInfor(i);
     int myPredicatePos;
-    if(varIndexMap.containsKey(i.getPredicate().getName())){
-      myPredicatePos = varIndexMap.get(i.getPredicate().getName());
+    if(varIndexMap.containsKey(i.getPredicate())){
+      myPredicatePos = varIndexMap.get(i.getPredicate());
     }
     else{
-      varIndexMap.put(i.getPredicate().getName(), numLocalVar);
+      varIndexMap.put(i.getPredicate(), numLocalVar);
       numLocalVar++;
       myPredicatePos = numLocalVar;
     }
@@ -351,20 +351,20 @@ public final class CodeGen extends InstVisitor {
     int src = 0;
     int dst = 0;
 
-    if(varIndexMap.containsKey(i.getSrcAddress().getName())){
-      src = varIndexMap.get(i.getSrcAddress().getName());
+    if(varIndexMap.containsKey(i.getSrcAddress())){
+      src = varIndexMap.get(i.getSrcAddress());
     }
     else{
-      varIndexMap.put(i.getSrcAddress().getName(), numLocalVar);
+      varIndexMap.put(i.getSrcAddress(), numLocalVar);
       numLocalVar++;
       src = numLocalVar;
     }
     src *= -8;
-    if(varIndexMap.containsKey(i.getDst().getName())){
-      dst = varIndexMap.get(i.getDst().getName());
+    if(varIndexMap.containsKey(i.getDst())){
+      dst = varIndexMap.get(i.getDst());
     }
     else{
-      varIndexMap.put(i.getDst().getName(), numLocalVar);
+      varIndexMap.put(i.getDst(), numLocalVar);
       numLocalVar++;
       dst = numLocalVar;
     }
@@ -386,20 +386,20 @@ public final class CodeGen extends InstVisitor {
     int src = 0;
     int dst = 0;
 
-    if(varIndexMap.containsKey(i.getSrcValue().getName())){
-      src = varIndexMap.get(i.getSrcValue().getName());
+    if(varIndexMap.containsKey(i.getSrcValue())){
+      src = varIndexMap.get(i.getSrcValue());
     }
     else{
-      varIndexMap.put(i.getSrcValue().getName(), numLocalVar);
+      varIndexMap.put(i.getSrcValue(), numLocalVar);
       numLocalVar++;
       src = numLocalVar;
     }
     src *= -8;
-    if(varIndexMap.containsKey(i.getDestAddress().getName())){
-      dst = varIndexMap.get(i.getDestAddress().getName());
+    if(varIndexMap.containsKey(i.getDestAddress())){
+      dst = varIndexMap.get(i.getDestAddress());
     }
     else{
-      varIndexMap.put(i.getDestAddress().getName(), numLocalVar);
+      varIndexMap.put(i.getDestAddress(), numLocalVar);
       numLocalVar++;
       dst = numLocalVar;
     }
@@ -413,11 +413,11 @@ public final class CodeGen extends InstVisitor {
     printInstructionInfor(i);
     int ret = 0;
 
-    if(varIndexMap.containsKey(i.getReturnValue().getName())){
-      ret = varIndexMap.get(i.getReturnValue().getName());
+    if(varIndexMap.containsKey(i.getReturnValue())){
+      ret = varIndexMap.get(i.getReturnValue());
     }
     else{
-      varIndexMap.put(i.getReturnValue().getName(), numLocalVar);
+      varIndexMap.put(i.getReturnValue(), numLocalVar);
       numLocalVar++;
       ret = numLocalVar;
     }
@@ -430,15 +430,14 @@ public final class CodeGen extends InstVisitor {
   public void visit(CallInst i) {
     printInstructionInfor(i);
     for(int j=0; j<i.getParams().size(); j++){
-      Value param = i.getParams().get(j);
+      var param = i.getParams().get(j);
       int pos = 0;
-      if(!varIndexMap.containsKey(param.toString())){
-        varIndexMap.put(param.toString(), numLocalVar);
-        pos = numLocalVar;
-        numLocalVar++;
+      if(!varIndexMap.containsKey(param)){
+        varIndexMap.put(param, numLocalVar);
+        pos = ++numLocalVar;
       }
       else{
-        pos = varIndexMap.get(param.toString());
+        pos = varIndexMap.get(param);
       }
       pos *= -8;
       //out.printCode(" ------- " + pos);
@@ -469,13 +468,13 @@ public final class CodeGen extends InstVisitor {
     out.printCode("call " + i.getCallee().getName());
     if (i.getParams().size() > 6){
       for (int index = i.getParams().size() - 1; index > 5; index--){
-        Value par = i.getParams().get(index);
+        var par = i.getParams().get(index);
         int stackPos = 0;
-        if(varIndexMap.containsKey(par.toString())){
-          stackPos = varIndexMap.get(par.toString());
+        if(varIndexMap.containsKey(par)){
+          stackPos = varIndexMap.get(par);
         }
         else{
-          varIndexMap.put(par.toString(), numLocalVar);
+          varIndexMap.put(par, numLocalVar);
           numLocalVar++;
           stackPos = numLocalVar;
         }
@@ -491,21 +490,21 @@ public final class CodeGen extends InstVisitor {
     int dst = 0;
     int inner = 0;
 
-    if(varIndexMap.containsKey(i.getDst().getName())){
-      dst = varIndexMap.get(i.getDst().getName());
+    if(varIndexMap.containsKey(i.getDst())){
+      dst = varIndexMap.get(i.getDst());
     }
     else{
-      varIndexMap.put(i.getDst().getName(), numLocalVar);
+      varIndexMap.put(i.getDst(), numLocalVar);
       numLocalVar++;
       dst = numLocalVar;
     }
     dst *= -8;
 
-    if(varIndexMap.containsKey(i.getInner().getName())){
-      inner = varIndexMap.get(i.getInner().getName());
+    if(varIndexMap.containsKey(i.getInner())){
+      inner = varIndexMap.get(i.getInner());
     }
     else{
-      varIndexMap.put(i.getInner().getName(), numLocalVar);
+      varIndexMap.put(i.getInner(), numLocalVar);
       numLocalVar++;
       inner = numLocalVar;
     }
