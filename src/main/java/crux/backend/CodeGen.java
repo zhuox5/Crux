@@ -87,13 +87,13 @@ public final class CodeGen extends InstVisitor {
     /**
      * Generate Body
      **/
-    numLocalVar = f.getNumTempVars() + f.getNumTempAddressVars();
-    if(numLocalVar % 2 != 0){
-      numLocalVar++;           //if uneven
+    numslots = f.getNumTempVars() + f.getNumTempAddressVars();
+    if(numslots % 2 != 0){
+      numslots++;           //if uneven
     }
     out.printCode(".globl " + f.getName());
     out.printLabel(f.getName() + ":");
-    out.printCode("enter $(8 * " + numLocalVar + "), $0");
+    out.printCode("enter $(8 * " + numslots + "), $0");
 
     Stack<Instruction> tovisited = new Stack<>();
     HashSet<Instruction> discovered = new HashSet<>();
