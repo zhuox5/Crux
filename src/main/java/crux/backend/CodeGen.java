@@ -288,10 +288,14 @@ public final class CodeGen extends InstVisitor {
 
     if(varIndexMap.containsKey(i.getDstVar())){
       dst = varIndexMap.get(i.getDstVar());
+      out.printCode("FUCK  ----- 1");
     }
     else{
       varIndexMap.put(i.getDstVar(), numLocalVar);
-      dst = ++numLocalVar;
+      //dst = ++numLocalVar;
+      //numLocalVar++;
+      dst = numLocalVar;
+      //out.printCode("FUCK  ----- 2 --- " + dst );
     }
     dst *= -8;
     if(srcval instanceof IntegerConstant){
@@ -329,7 +333,7 @@ public final class CodeGen extends InstVisitor {
 
   public void visit(JumpInst i) {
     printInstructionInfor(i);
-    int myPredicatePos;
+    int myPredicatePos = 0;
     if(varIndexMap.containsKey(i.getPredicate())){
       myPredicatePos = varIndexMap.get(i.getPredicate());
     }
