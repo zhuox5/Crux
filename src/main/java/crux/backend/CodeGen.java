@@ -288,7 +288,7 @@ public final class CodeGen extends InstVisitor {
 
     if(varIndexMap.containsKey(i.getDstVar())){
       dst = varIndexMap.get(i.getDstVar());
-      out.printCode("FUCK  ----- 1");
+      //out.printCode("FUCK  ----- 1");
     }
     else{
       varIndexMap.put(i.getDstVar(), numLocalVar);
@@ -310,6 +310,7 @@ public final class CodeGen extends InstVisitor {
       else{
         out.printCode("movq " + "$0" + ", " + dst + "(%rbp)");
       }
+      out.printCode("movq %r10, " + dst + "(%rbp)");
     }
     else if(srcval instanceof AddressVar){
 
