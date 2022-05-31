@@ -208,10 +208,11 @@ public final class CodeGen extends InstVisitor {
     }
     else{
       varIndexMap.put(i.getDst().getName(), numLocalVar);
-      numLocalVar++;
       dst = numLocalVar;
+      numLocalVar++;
     }
     dst *= -8;
+    //out.printCode("test ---- " + dst); //TODO
     out.printCode("movq %r10, "+ dst + "(%rbp)");
   }
 
@@ -437,7 +438,6 @@ public final class CodeGen extends InstVisitor {
       }
       else{
         pos = varIndexMap.get(param.toString());
-        pos++; //TODO
       }
       pos *= -8;
       //out.printCode(" ------- " + pos);
@@ -480,7 +480,7 @@ public final class CodeGen extends InstVisitor {
         }
         stackPos *= -8;
         out.printCode("movq " + stackPos + "(%rbp), %r10");
-        out.printCode("movq %r10, " + (numLocalVar++)*(-8) + "(%rbp)"); //modified here
+        out.printCode("movq %r10, " + (numLocalVar)*(-8) + "(%rbp)"); //modified here
       }
     }
   }
