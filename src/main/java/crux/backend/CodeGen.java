@@ -142,7 +142,7 @@ public final class CodeGen extends InstVisitor {
     //String dst = i.getDst().getName();
     if(i.getOffset() == null){
       out.printCode("movq " + src.getName() + "@GOTPCREL(%rip), %r11");
-      out.printCode("movq %r11, " + i.getDst().toString() + " (%rbp)");
+      out.printCode("movq %r11, " + i.getDst().getName() + " (%rbp)");
     }
     else{
       out.printCode("imulq $8, %r10");
@@ -376,8 +376,6 @@ public final class CodeGen extends InstVisitor {
 
   public void visit(NopInst i) {
     //printInstructionInfor(i);
-    //out.printCode("/* nop */");
-    //do nothing
   }
 
   public void visit(StoreInst i) {
