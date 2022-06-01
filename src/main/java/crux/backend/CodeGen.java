@@ -80,7 +80,9 @@ public final class CodeGen extends InstVisitor {
       } else if (argIndex == 6) {
         out.printCode("movq %r9, -48(%rbp)");
       } else {
-        out.printCode("push " + myLocalVar.getName());
+        int overflow = (argIndex-3) * 8;
+        out.printCode("movq " + overflow + "(%rbp), %r10");
+        out.printCode("movq %r10, " + argIndex * (-8) + "(%rbp)");
         //TODO
       }
       argIndex++;
