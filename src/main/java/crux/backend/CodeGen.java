@@ -325,8 +325,7 @@ public final class CodeGen extends InstVisitor {
         out.printCode("movq " + pos + "(%rbp), %r9");
       }
       else{
-        //out.printCode("Overflow");
-        //will not reach this line
+        // out.printCode("Overflow"), will not reach this line
       }
     }
 
@@ -339,8 +338,8 @@ public final class CodeGen extends InstVisitor {
       }
     }
     out.printCode("call " + i.getCallee().getName());
-    int dst = getPositionRBP(i.getDst());
-    out.printCode("movq %rax, " + dst + "(%rbq)");
+    //int dst = getPositionRBP(i.getDst());
+    //out.printCode("movq %rax, " + dst + "(%rbq)");
 
   }
 
