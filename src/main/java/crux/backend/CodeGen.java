@@ -204,13 +204,13 @@ public final class CodeGen extends InstVisitor {
 
   public void visit(CompareInst i) {
     //printInstructionInfor(i);
-    out.printCode("/* BinaryOperator */ ");
+    out.printCode("/* CompareInst */ ");
     int left = getPositionRBP(i.getLeftOperand());
     int right = getPositionRBP(i.getRightOperand());
     out.printCode("movq $0, %rax");
     out.printCode("movq $1, %r10");
     out.printCode("movq " + left + "(%rbp), %r11");
-    out.printCode("cmp " + right + ", %r11");
+    out.printCode("cmp " + right + "(%rbp), %r11");
 
     if(i.getPredicate() == CompareInst.Predicate.GE){
       out.printCode("cmovge %r10, %rax");
