@@ -120,7 +120,7 @@ public final class CodeGen extends InstVisitor {
       if(myLableMap.containsKey(inst)){
         out.printLabel(myLableMap.get(inst) + ":");
       }
-        inst.accept(this);
+      inst.accept(this);
         Instruction first = inst.getNext(0);
         Instruction second = inst.getNext(1);
         if (second != null && !discovered.contains(second)){
