@@ -278,10 +278,12 @@ public final class CodeGen extends InstVisitor {
   public void visit(JumpInst i) {
     printInstructionInfor(i);
     int myPredicatePos = getPositionRBP(i.getPredicate());
+    out.printCode("movq $0, %rax");
+    out.printCode("movq $1, %r10");
     out.printCode("movq " + myPredicatePos + "(%rbp), %r10");
     out.printCode("cmp $1, %r10");
     out.printCode("je " + myLableMap.get(i.getNext(1)));
-    out.printCode("cmp $0, %r10");
+    out.printCode("cmp $0, %rax");
     out.printCode("je " + myLableMap.get(i.getNext(0)));
   }
 
