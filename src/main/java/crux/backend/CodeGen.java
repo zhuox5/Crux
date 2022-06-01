@@ -14,12 +14,25 @@ import java.util.*;
 public final class CodeGen extends InstVisitor {
   private final Program p;
   private final CodePrinter out;
-
+  private int numLocalVar = 1;
   //private boolean intelMac = false;
   private HashMap<Variable, Integer> varIndexMap = new HashMap<>();
   private int numslots = 0;
   private HashMap<Instruction, String> myLableMap;
 
+  private int getPositionRBP(Variable v){
+    int output = 0;
+    if(varIndexMap.containsKey(v)){
+      output = varIndexMap.get(v);
+    }
+    else{
+      varIndexMap.put(v, numLocalVar);
+      output = numLocalVar;
+      numLocalVar++;
+    }
+    output *= -8;
+    return output;
+  }
 
   private final IRValueFormatter irFormat = new IRValueFormatter();
   private void printInstructionInfor(Instruction i){
@@ -135,28 +148,8 @@ public final class CodeGen extends InstVisitor {
   public void visit(AddressAt i) {
     printInstructionInfor(i);
     Symbol src = i.getBase();
-    int dst = 0;
-    if(varIndexMap.containsKey(i.getDst())){
-      dst = varIndexMap.get(i.getDst());
-    }
-    else{
-      varIndexMap.put(i.getDst(), numLocalVar);
-      numLocalVar++;
-      dst = numLocalVar;
-    }
-    dst *= -8;
-
-    int offset = 0;
-    if(varIndexMap.containsKey(i.getOffset())){
-      offset = varIndexMap.get(i.getOffset());
-    }
-    else{
-      varIndexMap.put(i.getOffset(), numLocalVar);
-      numLocalVar++;
-      offset = numLocalVar;
-    }
-    offset *= -8;
-
+    int dst = getPositionRBP(i.getDst());
+    int offset = getPositionRBP(i.getOffset());
     if(i.getOffset() == null){
       out.printCode("movq " + src.getName() + "@GOTPCREL(%rip), %r11"); //
       out.printCode("movq %r11, " + dst + " (%rbp)");
@@ -170,7 +163,6 @@ public final class CodeGen extends InstVisitor {
     }
   }
 
-  private int numLocalVar = 1;
 
 
   public void visit(BinaryOperator i) {
@@ -184,38 +176,9 @@ public final class CodeGen extends InstVisitor {
       op = "No such operator"; //safe checker, should not reach here
       out.printCode(op);
     }
-    int left;
-    int right;
-    if(varIndexMap.containsKey(i.getLeftOperand())){
-      left = varIndexMap.get(i.getLeftOperand());
-    }
-    else{
-      varIndexMap.put(i.getLeftOperand(), numLocalVar);
-      numLocalVar++;
-      left = numLocalVar;
-    }
-    left *= -8;
-
-    if(varIndexMap.containsKey(i.getRightOperand())){
-      right = varIndexMap.get(i.getRightOperand());
-
-    }
-    else{
-      varIndexMap.put(i.getRightOperand(), numLocalVar);
-      numLocalVar++;
-      right = numLocalVar;
-    }
-    right *= -8;
-    int dst = 0;
-    if(varIndexMap.containsKey(i.getDst())){
-      dst = varIndexMap.get(i.getDst());
-    }
-    else{
-      varIndexMap.put(i.getDst(), numLocalVar);
-      numLocalVar++;
-      dst = numLocalVar;
-    }
-    dst *= -8;
+    int left = getPositionRBP(i.getLeftOperand());
+    int right = getPositionRBP(i.getRightOperand());
+    int dst = getPositionRBP(i.getDst());
 
     if(op.equals("Add") || op.equals("Sub") || op.equals("Mul") || op.equals("Div")){
       if(op.equals("Add")){
@@ -246,27 +209,9 @@ public final class CodeGen extends InstVisitor {
   public void visit(CompareInst i) {
     //printInstructionInfor(i);
     out.printCode("/* BinaryOperator */ ");
-    int left;
-    int right;
-    if(varIndexMap.containsKey(i.getLeftOperand())){
-      left = varIndexMap.get(i.getLeftOperand());
-    }
-    else{
-      varIndexMap.put(i.getLeftOperand(), numLocalVar);
-      numLocalVar++;
-      left = numLocalVar;
-    }
-    left *= -8;
+    int left = getPositionRBP(i.getLeftOperand());
+    int right = getPositionRBP(i.getRightOperand());
 
-    if(varIndexMap.containsKey(i.getRightOperand())){
-      right = varIndexMap.get(i.getRightOperand());
-    }
-    else{
-      varIndexMap.put(i.getRightOperand(), numLocalVar);
-      numLocalVar++;
-      right = numLocalVar;
-    }
-    right *= -8;
     out.printCode("movq " + left + "(%rbp), %r10");
     out.printCode("movq " + right + "(%rbp), %r11");
     out.printCode("cmp %r11, %r10");
@@ -293,16 +238,7 @@ public final class CodeGen extends InstVisitor {
     }
     out.printCode("cmov" + myPredicate + " %r10, %r11");
 
-    int dst;
-    if(varIndexMap.containsKey(i.getDst())){
-      dst = varIndexMap.get(i.getDst());
-    }
-    else{
-      varIndexMap.put(i.getDst(), numLocalVar);
-      numLocalVar++;
-      dst = numLocalVar;
-    }
-    dst *= -8;
+    int dst = getPositionRBP(i.getDst());
     out.printCode("movq %r11, " + dst + "(%rbp)");
 
   }
@@ -310,18 +246,8 @@ public final class CodeGen extends InstVisitor {
   public void visit(CopyInst i) {
     printInstructionInfor(i);
     var srcval = i.getSrcValue();
-    int dst = 0;
+    int dst = getPositionRBP(i.getDstVar());
 
-    if(varIndexMap.containsKey(i.getDstVar())){
-      dst = varIndexMap.get(i.getDstVar());
-    }
-    else{
-      varIndexMap.put(i.getDstVar(), numLocalVar);
-      dst = ++numLocalVar;
-      //numLocalVar++;
-      //dst = numLocalVar;
-    }
-    dst *= -8;
     if(srcval instanceof IntegerConstant){
       //TODO error
       out.printCode("movq " + "$" + ((IntegerConstant)srcval).getValue() + ", " + "%r10");
@@ -341,16 +267,7 @@ public final class CodeGen extends InstVisitor {
     }
     else if(srcval instanceof LocalVar){
       var myLocalvar = ((LocalVar) srcval);
-      int src;
-      if(varIndexMap.containsKey(myLocalvar)){
-        src = varIndexMap.get(myLocalvar);
-      }
-      else{
-        varIndexMap.put(myLocalvar, numLocalVar);
-        numLocalVar++;
-        src = numLocalVar;
-      }
-      src *= -8;
+      int src = getPositionRBP(myLocalvar);
       out.printCode("movq " + src + "(%rbp), %r10");
       out.printCode("movq " + "%r10" + ", " + dst + "(%rbp)");
     }
@@ -358,16 +275,7 @@ public final class CodeGen extends InstVisitor {
 
   public void visit(JumpInst i) {
     printInstructionInfor(i);
-    int myPredicatePos = 0;
-    if(varIndexMap.containsKey(i.getPredicate())){
-      myPredicatePos = varIndexMap.get(i.getPredicate());
-    }
-    else{
-      varIndexMap.put(i.getPredicate(), numLocalVar);
-      numLocalVar++;
-      myPredicatePos = numLocalVar;
-    }
-    myPredicatePos *= -8;
+    int myPredicatePos = getPositionRBP(i.getPredicate());
     out.printCode("movq " + myPredicatePos + "(%rbp), %r10");
     out.printCode("cmp $1, %r10");
     out.printCode("je " + myLableMap.get(i.getNext(1)));
@@ -375,27 +283,8 @@ public final class CodeGen extends InstVisitor {
 
   public void visit(LoadInst i) {
     printInstructionInfor(i);
-    int src = 0;
-    int dst = 0;
-
-    if(varIndexMap.containsKey(i.getSrcAddress())){
-      src = varIndexMap.get(i.getSrcAddress());
-    }
-    else{
-      varIndexMap.put(i.getSrcAddress(), numLocalVar);
-      numLocalVar++;
-      src = numLocalVar;
-    }
-    src *= -8;
-    if(varIndexMap.containsKey(i.getDst())){
-      dst = varIndexMap.get(i.getDst());
-    }
-    else{
-      varIndexMap.put(i.getDst(), numLocalVar);
-      numLocalVar++;
-      dst = numLocalVar;
-    }
-    dst *= -8;
+    int src = getPositionRBP(i.getSrcAddress());
+    int dst = getPositionRBP(i.getDst());
     out.printCode("movq " + src + "(%rbp), %r10");
     out.printCode("movq (%r10), %r11");
     out.printCode("movq %r11, " + dst + "(%rbp)");
@@ -408,27 +297,8 @@ public final class CodeGen extends InstVisitor {
 
   public void visit(StoreInst i) {
     printInstructionInfor(i);
-    int src = 0;
-    int dst = 0;
-
-    if(varIndexMap.containsKey(i.getSrcValue())){
-      src = varIndexMap.get(i.getSrcValue());
-    }
-    else{
-      varIndexMap.put(i.getSrcValue(), numLocalVar);
-      numLocalVar++;
-      src = numLocalVar;
-    }
-    src *= -8;
-    if(varIndexMap.containsKey(i.getDestAddress())){
-      dst = varIndexMap.get(i.getDestAddress());
-    }
-    else{
-      varIndexMap.put(i.getDestAddress(), numLocalVar);
-      numLocalVar++;
-      dst = numLocalVar;
-    }
-    dst *= -8;
+    int src = getPositionRBP(i.getSrcValue());
+    int dst = getPositionRBP(i.getDestAddress());
     out.printCode("movq " + dst + "(%rbp), %r10");
     out.printCode("movq " + src + "(%rbp), %r11");
     out.printCode("movq %r11, (%r10)");
@@ -436,16 +306,7 @@ public final class CodeGen extends InstVisitor {
 
   public void visit(ReturnInst i) {
     printInstructionInfor(i);
-    int ret = 0;
-    if(varIndexMap.containsKey(i.getReturnValue())){
-      ret = varIndexMap.get(i.getReturnValue());
-    }
-    else{
-      varIndexMap.put(i.getReturnValue(), numLocalVar);
-      numLocalVar++;
-      ret = numLocalVar;
-    }
-    ret *= -8;
+    int ret = getPositionRBP(i.getReturnValue());
     out.printCode("movq " + ret + "(%rbp), %rax");
     out.printCode("leave");
     out.printCode("ret");
@@ -455,19 +316,7 @@ public final class CodeGen extends InstVisitor {
     printInstructionInfor(i);
     for(int j=0; j<i.getParams().size(); j++){
       var param = i.getParams().get(j);
-      int pos = 0;
-
-      if(varIndexMap.containsKey(param)){
-        varIndexMap.put(param, numLocalVar); //TODO may some error here !!!
-        pos = varIndexMap.get(param);
-      }
-      else{
-        varIndexMap.put(param, numLocalVar);
-        numLocalVar++;
-        pos = numLocalVar;
-      }
-      pos *= -8;
-
+      int pos = getPositionRBP(param);
 
       if(j==0){
         out.printCode("movq " + pos + "(%rbp), %rdi");
@@ -496,16 +345,7 @@ public final class CodeGen extends InstVisitor {
     if (i.getParams().size() > 6){
       for (int index = i.getParams().size() - 1; index > 5; index--){
         var par = i.getParams().get(index);
-        int stackPos = 0;
-        if(varIndexMap.containsKey(par)){
-          stackPos = varIndexMap.get(par);
-        }
-        else{
-          varIndexMap.put(par, numLocalVar);
-          numLocalVar++;
-          stackPos = numLocalVar;
-        }
-        stackPos *= -8;
+        int stackPos = getPositionRBP(par);
         out.printCode("movq " + stackPos + "(%rbp), %r10");
         out.printCode("movq %r10, " + (numLocalVar)*(-8) + "(%rbp)"); //modified here
       }
@@ -514,28 +354,9 @@ public final class CodeGen extends InstVisitor {
 
   public void visit(UnaryNotInst i) {
     printInstructionInfor(i);
-    int dst = 0;
-    int inner = 0;
+    int dst = getPositionRBP(i.getDst());
+    int inner = getPositionRBP(i.getInner());
 
-    if(varIndexMap.containsKey(i.getDst())){
-      dst = varIndexMap.get(i.getDst());
-    }
-    else{
-      varIndexMap.put(i.getDst(), numLocalVar);
-      numLocalVar++;
-      dst = numLocalVar;
-    }
-    dst *= -8;
-
-    if(varIndexMap.containsKey(i.getInner())){
-      inner = varIndexMap.get(i.getInner());
-    }
-    else{
-      varIndexMap.put(i.getInner(), numLocalVar);
-      numLocalVar++;
-      inner = numLocalVar;
-    }
-    inner *= -8;
     out.printCode("movq " + inner + "(%rbp), %r10");
     out.printCode("not %r10");
     out.printCode("movq %r10, " + dst + "(%rbp)");
