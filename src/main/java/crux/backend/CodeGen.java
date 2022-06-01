@@ -378,10 +378,9 @@ public final class CodeGen extends InstVisitor {
       myPredicatePos = numLocalVar;
     }
     myPredicatePos *= -8;
-    out.bufferCode("movq " + myPredicatePos + "(%rbp), %r10");
-    out.bufferCode("movq $1, %r11");
-    out.bufferCode("cmp %r10, %r11");
-    out.bufferCode("je " + myLableMap.get(i.getNext(1)));
+    out.printCode("movq " + myPredicatePos + "(%rbp), %r10");
+    out.printCode("cmp $1, %r10");
+    out.printCode("je " + myLableMap.get(i.getNext(1)));
   }
 
   public void visit(LoadInst i) {
@@ -457,9 +456,9 @@ public final class CodeGen extends InstVisitor {
       ret = numLocalVar;
     }
     ret *= -8;
-    out.bufferCode("movq " + ret + "(%rbp), %rax");
-    out.bufferCode("leave");
-    out.bufferCode("ret");
+    out.printCode("movq " + ret + "(%rbp), %rax");
+    out.printCode("leave");
+    out.printCode("ret");
   }
 
   public void visit(CallInst i) {
