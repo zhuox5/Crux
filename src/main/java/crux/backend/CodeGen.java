@@ -118,9 +118,8 @@ public final class CodeGen extends InstVisitor {
     while(!tovisited.isEmpty()){
       Instruction inst = tovisited.pop();
       if(myLableMap.containsKey(inst)){
-        out.printCode(myLableMap.get(inst) + ":");
+        out.printLabel(myLableMap.get(inst) + ":");
       }
-      else{
         inst.accept(this);
         Instruction first = inst.getNext(0);
         Instruction second = inst.getNext(1);
@@ -141,7 +140,7 @@ public final class CodeGen extends InstVisitor {
           out.printCode("leave");
           out.printCode("ret");
         }
-      }
+
     }
 
   }
@@ -248,10 +247,8 @@ public final class CodeGen extends InstVisitor {
     int dst = getPositionRBP(i.getDstVar());
 
     if(srcval instanceof IntegerConstant){
-      //TODO error
       out.printCode("movq " + "$" + ((IntegerConstant)srcval).getValue() + ", " + "%r10");
       out.printCode("movq %r10, " + dst + "(%rbp)");
-      //out.printCode("movq " + "$" + ((IntegerConstant)srcval).getValue() + ", " + dst + "(%rbp)");
     }
     else if(srcval instanceof BooleanConstant){
       if(((BooleanConstant) srcval).getValue()){
@@ -260,9 +257,6 @@ public final class CodeGen extends InstVisitor {
       else{
         out.printCode("movq " + "$0" + ", " + dst + "(%rbp)");
       }
-    }
-    else if(srcval instanceof AddressVar){
-
     }
     else if(srcval instanceof LocalVar){
       var myLocalvar = ((LocalVar) srcval);
@@ -275,8 +269,6 @@ public final class CodeGen extends InstVisitor {
   public void visit(JumpInst i) {
     printInstructionInfor(i);
     int myPredicatePos = getPositionRBP(i.getPredicate());
-    out.printCode("movq $0, %rax");
-    out.printCode("movq $1, %r10");
     out.printCode("movq " + myPredicatePos + "(%rbp), %r10");
     out.printCode("cmp $1, %r10");
     out.printCode("je " + myLableMap.get(i.getNext(1)));
