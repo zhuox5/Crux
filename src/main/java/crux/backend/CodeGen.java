@@ -203,7 +203,7 @@ public final class CodeGen extends InstVisitor {
 
     if(varIndexMap.containsKey(i.getRightOperand())){
       right = varIndexMap.get(i.getRightOperand());
-      right++;
+
     }
     else{
       varIndexMap.put(i.getRightOperand(), numLocalVar);
