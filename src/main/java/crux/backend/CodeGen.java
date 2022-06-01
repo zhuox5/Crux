@@ -233,10 +233,10 @@ public final class CodeGen extends InstVisitor {
         out.printCode("movq "+ left + "(%rbp), %r10");
         out.printCode("subq "+ right + "(%rbp), %r10");
         out.printCode("movq %r10, "+ dst + "(%rbp)");
-      } 
+      }
       else if(op.equals("Mul")){
         out.printCode("movq "+ left + "(%rbp), %r10");
-        out.printCode("mulq "+ right + "(%rbp), %r10");
+        out.printCode("imulq "+ right + "(%rbp), %r10");
         out.printCode("movq %r10, "+ dst + "(%rbp)");
       }
       else if(op.equals("Div")){
