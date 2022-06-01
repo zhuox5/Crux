@@ -210,24 +210,6 @@ public final class CodeGen extends InstVisitor {
       right = numLocalVar;
     }
     right *= -8;
-    out.printCode("movq "+ left + "(%rbp), %r10");
-    out.printCode("movq "+ right + "(%rbp), %r11");
-
-    if(op.equals("Add") || op.equals("Sub") || op.equals("Mul") || op.equals("Div")){
-      if(op.equals("Add")){
-        out.printCode("addq %r11, %r10");
-      }
-      else if(op.equals("Sub")){
-        out.printCode("subq %r11, %r10");
-      }
-      else if(op.equals("Mul")){
-        out.printCode("imulq %r11, %r10");
-      }
-      else if(op.equals("Div")){
-        out.printCode("idivq %r11, %r10");
-      }
-    }
-
     int dst = 0;
     if(varIndexMap.containsKey(i.getDst())){
       dst = varIndexMap.get(i.getDst());
@@ -240,7 +222,33 @@ public final class CodeGen extends InstVisitor {
     }
     dst *= -8;
 
-    out.printCode("movq %r10, "+ dst + "(%rbp)");
+    if(op.equals("Add") || op.equals("Sub") || op.equals("Mul") || op.equals("Div")){
+      if(op.equals("Add")){
+        out.printCode("movq "+ left + "(%rbp), %r10");
+        out.printCode("movq "+ right + "(%rbp), %r11");
+        out.printCode("addq %r11, %r10");
+        out.printCode("movq %r10, "+ dst + "(%rbp)");
+      }
+      else if(op.equals("Sub")){
+        out.printCode("movq "+ left + "(%rbp), %r10");
+        out.printCode("movq "+ right + "(%rbp), %r11");
+        out.printCode("subq %r11, %r10");
+        out.printCode("movq %r10, "+ dst + "(%rbp)");
+      }
+      else if(op.equals("Mul")){
+        out.printCode("movq "+ left + "(%rbp), %r10");
+        out.printCode("movq "+ right + "(%rbp), %r11");
+        out.printCode("mulq %r11, %r10");
+        out.printCode("movq %r10, "+ dst + "(%rbp)");
+      }
+      else if(op.equals("Div")){
+        out.printCode("movq " + left + ", %rax");
+        out.printCode("cqto");
+        out.printCode("idivq " + right + "(%rbp)");
+        out.printCode("movq %rax, " + dst + "(%rbp)");
+      }
+    }
+
   }
 
   public void visit(CompareInst i) {
