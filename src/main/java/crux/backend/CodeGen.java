@@ -338,8 +338,8 @@ public final class CodeGen extends InstVisitor {
       }
     }
     out.printCode("call " + i.getCallee().getName());
-    //int dst = getPositionRBP(i.getDst());
-    //out.printCode("movq %rax, " + dst + "(%rbq)");
+    int dst = getPositionRBP(i.getDst());
+    out.printCode("movq %rax, " + dst + "(%rbp)");
 
   }
 
