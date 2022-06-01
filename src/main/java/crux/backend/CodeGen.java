@@ -455,11 +455,10 @@ public final class CodeGen extends InstVisitor {
     printInstructionInfor(i);
     for(int j=0; j<i.getParams().size(); j++){
       var param = i.getParams().get(j);
-      //out.printCode("dddddd: ---- " + param);
       int pos = 0;
 
       if(varIndexMap.containsKey(param)){
-        varIndexMap.put(param, numLocalVar++); //TODO may some error here !!!
+        varIndexMap.put(param, numLocalVar); //TODO may some error here !!!
         pos = varIndexMap.get(param);
       }
       else{
@@ -471,7 +470,7 @@ public final class CodeGen extends InstVisitor {
 
 
       if(j==0){
-        out.printCode("movq " + pos + "(%rbp), %rdi");   //TODO error
+        out.printCode("movq " + pos + "(%rbp), %rdi");
       }
       else if(j==1){
         out.printCode("movq " + pos + "(%rbp), %rsi");
