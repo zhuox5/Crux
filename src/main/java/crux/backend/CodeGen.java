@@ -20,6 +20,7 @@ public final class CodeGen extends InstVisitor {
   private int numslots = 0;
   private HashMap<Instruction, String> myLableMap;
 
+
   private final IRValueFormatter irFormat = new IRValueFormatter();
   private void printInstructionInfor(Instruction i){
     var info = String.format("/* %s */", i.format(irFormat));
@@ -147,7 +148,6 @@ public final class CodeGen extends InstVisitor {
       varIndexMap.put(i.getDst(), numLocalVar);
       numLocalVar++;
       dst = numLocalVar;
-
     }
     dst *= -8;
 
@@ -164,13 +164,13 @@ public final class CodeGen extends InstVisitor {
     dst *= -8;
 
     if(i.getOffset() == null){
-      out.printCode("movq " + src.getName() + "@GOTPCREL(%rip), %r11");
+      out.printCode("movq " + src.getName() + "@GOTPCREL(%rip), %r11"); //
       out.printCode("movq %r11, " + dst + " (%rbp)");
     }
     else{
       out.printCode("movq " + offset + "(%rbp), %r11");
       out.printCode("imulq $8, %r10");
-      out.printCode("movq " + src.getName() + "@GOTPCREL(%rip), %r10");
+      out.printCode("movq " + src.getName() + "@GOTPCREL(%rip), %r10"); //
       out.printCode("addq %r10, %r11");
       out.printCode("movq %r11, " + dst + "(%rbp)");
     }
@@ -237,6 +237,7 @@ public final class CodeGen extends InstVisitor {
       varIndexMap.put(i.getDst(), numLocalVar);
       numLocalVar++;
       dst = numLocalVar;
+      //out.printCode("FUCK --- " + dst);
     }
     dst *= -8;
 
@@ -460,18 +461,21 @@ public final class CodeGen extends InstVisitor {
       var param = i.getParams().get(j);
       //out.printCode("dddddd: ---- " + param);
       int pos = 0;
-      if(!varIndexMap.containsKey(param)){
+
+      if(varIndexMap.containsKey(param)){
+        varIndexMap.put(param, numLocalVar++);
+        pos = varIndexMap.get(param);
+      }
+      else{
         varIndexMap.put(param, numLocalVar);
         numLocalVar++;
         pos = numLocalVar;
       }
-      else{
-        pos = varIndexMap.get(param);
-      }
       pos *= -8;
 
+
       if(j==0){
-        out.printCode("movq " + pos + "(%rbp), %rdi");
+        out.printCode("movq " + pos + "(%rbp), %rdi");   //TODO error
       }
       else if(j==1){
         out.printCode("movq " + pos + "(%rbp), %rsi");
