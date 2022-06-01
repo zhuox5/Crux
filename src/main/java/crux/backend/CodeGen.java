@@ -213,35 +213,32 @@ public final class CodeGen extends InstVisitor {
     out.printCode("/* BinaryOperator */ ");
     int left = getPositionRBP(i.getLeftOperand());
     int right = getPositionRBP(i.getRightOperand());
-
-    out.printCode("movq " + left + "(%rbp), %r10");
-    out.printCode("movq " + right + "(%rbp), %r11");
-    out.printCode("cmp %r11, %r10");
-    out.printCode("movq $0, %r11");
+    out.printCode("movq $0, %rax");
     out.printCode("movq $1, %r10");
-    String myPredicate = "";
+    out.printCode("movq " + left + "(%rbp), %r11");
+    out.printCode("cmp " + right + ", %r11");
+
     if(i.getPredicate() == CompareInst.Predicate.GE){
-      myPredicate = "ge";
+      out.printCode("cmovge %r10, %rax");
     }
     else if(i.getPredicate() == CompareInst.Predicate.LE){
-      myPredicate = "le";
+      out.printCode("cmovle %r10, %rax");
     }
     else if(i.getPredicate() == CompareInst.Predicate.GT){
-      myPredicate = "g";
+      out.printCode("cmovg %r10, %rax");
     }
     else if(i.getPredicate() == CompareInst.Predicate.LT){
-      myPredicate = "l";
+      out.printCode("cmovl %r10, %rax");
     }
     else if(i.getPredicate() == CompareInst.Predicate.EQ){
-      myPredicate = "e";
+      out.printCode("cmove %r10, %rax");
     }
     else if(i.getPredicate() == CompareInst.Predicate.NE){
-      myPredicate = "ne";
+      out.printCode("cmovne %r10, %rax");
     }
-    out.printCode("cmov" + myPredicate + " %r10, %r11");
 
     int dst = getPositionRBP(i.getDst());
-    out.printCode("movq %r11, " + dst + "(%rbp)");
+    out.printCode("movq %rax, " + dst + "(%rbp)");
 
   }
 
@@ -283,8 +280,6 @@ public final class CodeGen extends InstVisitor {
     out.printCode("movq " + myPredicatePos + "(%rbp), %r10");
     out.printCode("cmp $1, %r10");
     out.printCode("je " + myLableMap.get(i.getNext(1)));
-    out.printCode("cmp $0, %rax");
-    out.printCode("je " + myLableMap.get(i.getNext(0)));
   }
 
   public void visit(LoadInst i) {
