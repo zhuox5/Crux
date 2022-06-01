@@ -86,21 +86,22 @@ public final class CodeGen extends InstVisitor {
 
     myLableMap = f.assignLabels(count);
     List<LocalVar> myArgs = f.getArguments();
-    numslots = 0;
+
     int argIndex = 1;
     for (LocalVar myLocalVar : myArgs) {
+      int n = getPositionRBP(myLocalVar);
       if (argIndex == 1) {
-        out.printCode("movq %rdi, -8(%rbp)");
+        out.printCode("movq %rdi, " + n + "(%rbp)");
       } else if (argIndex == 2) {
-        out.printCode("movq %rsi, -16(%rbp)");
+        out.printCode("movq %rsi, " + n + "(%rbp)");
       } else if (argIndex == 3) {
-        out.printCode("movq %rdx, -24(%rbp)");
+        out.printCode("movq %rdx, " + n + "(%rbp)");
       } else if (argIndex == 4) {
-        out.printCode("movq %rcx, -32(%rbp)");
+        out.printCode("movq %rcx, " + n + "(%rbp)");
       } else if (argIndex == 5) {
-        out.printCode("movq %r8, -40(%rbp)");
+        out.printCode("movq %r8, " + n + "(%rbp)");
       } else if (argIndex == 6) {
-        out.printCode("movq %r9, -48(%rbp)");
+        out.printCode("movq %r9, " + n + "(%rbp)");
       } else {
         int overflow = (argIndex - 3) * 8;
         out.printCode("movq " + overflow + "(%rbp), %r10");
@@ -303,9 +304,9 @@ public final class CodeGen extends InstVisitor {
   public void visit(CallInst i) {
     printInstructionInfor(i);
     for(int j=0; j<i.getParams().size(); j++){
-      var param = i.getParams().get(j);
+      Variable param = i.getParams().get(j);
       int pos = getPositionRBP(param);
-
+      //out.printCode("------------------------");
       if(j==0){
         out.printCode("movq " + pos + "(%rbp), %rdi");
       }
