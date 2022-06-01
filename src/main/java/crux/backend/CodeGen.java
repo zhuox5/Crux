@@ -203,6 +203,7 @@ public final class CodeGen extends InstVisitor {
 
     if(varIndexMap.containsKey(i.getRightOperand())){
       right = varIndexMap.get(i.getRightOperand());
+      right++;
     }
     else{
       varIndexMap.put(i.getRightOperand(), numLocalVar);
@@ -242,7 +243,7 @@ public final class CodeGen extends InstVisitor {
         out.printCode("movq %r10, "+ dst + "(%rbp)");
       }
       else if(op.equals("Div")){
-        out.printCode("movq " + left + ", %rax");
+        out.printCode("movq " + left + "(%rbp), %rax");
         out.printCode("cqto");
         out.printCode("idivq " + right + "(%rbp)");
         out.printCode("movq %rax, " + dst + "(%rbp)");
