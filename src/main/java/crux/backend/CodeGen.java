@@ -71,7 +71,6 @@ public final class CodeGen extends InstVisitor {
     return var.toString();
   }
 
-
   private void genCode(Function f, int count[]){
     //TODO
     /**
@@ -120,31 +119,28 @@ public final class CodeGen extends InstVisitor {
       if(myLableMap.containsKey(inst)){
         out.printLabel(myLableMap.get(inst) + ":");
       }
-      inst.accept(this);
-        Instruction first = inst.getNext(0);
-        Instruction second = inst.getNext(1);
-        if (second != null && !discovered.contains(second)){
-          tovisited.push(second);
-          discovered.add(second);
+      inst.accept(this);    //still need to visit
+      Instruction first = inst.getNext(0);
+      Instruction second = inst.getNext(1);
+      if (second != null && !discovered.contains(second)){
+        tovisited.push(second);
+        discovered.add(second);
+      }
+      if (first != null) {
+        if(!discovered.contains(first)){
+          tovisited.push(first);
+          discovered.add(first);
         }
-        if (first != null) {
-          if(!discovered.contains(first)){
-            tovisited.push(first);
-            discovered.add(first);
-          }
-          if((tovisited.isEmpty() || first != tovisited.peek())){
-            out.printCode("jmp " + myLableMap.get(first));
-          }
+        if((tovisited.isEmpty() || first != tovisited.peek())){
+          out.printCode("jmp " + myLableMap.get(first));
         }
-        else{
-          out.printCode("leave");
-          out.printCode("ret");
-        }
-
+      }
+      else{
+        out.printCode("leave");
+        out.printCode("ret");
+      }
     }
-
   }
-
 
   public void visit(AddressAt i) {
     printInstructionInfor(i);
@@ -204,7 +200,6 @@ public final class CodeGen extends InstVisitor {
         out.printCode("movq %rax, " + dst + "(%rbp)");
       }
     }
-
   }
 
   public void visit(CompareInst i) {
@@ -334,7 +329,7 @@ public final class CodeGen extends InstVisitor {
         //will not reach this line
       }
     }
-    out.printCode("call " + i.getCallee().getName());
+
     if (i.getParams().size() > 6){
       for (int index = i.getParams().size() - 1; index > 5; index--){
         var par = i.getParams().get(index);
@@ -343,6 +338,10 @@ public final class CodeGen extends InstVisitor {
         out.printCode("movq %r10, " + (numLocalVar)*(-8) + "(%rbp)"); //modified here
       }
     }
+    out.printCode("call " + i.getCallee().getName());
+    int dst = getPositionRBP(i.getDst());
+    out.printCode("movq %rax, " + dst + "(%rbq)");
+
   }
 
   public void visit(UnaryNotInst i) {
