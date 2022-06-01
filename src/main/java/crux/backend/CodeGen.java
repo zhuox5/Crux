@@ -183,7 +183,7 @@ public final class CodeGen extends InstVisitor {
     String op = i.getOperator().toString();
     //out.printCode(op);
     if(op.equals("Add") || op.equals("Sub") || op.equals("Mul") || op.equals("Div")){
-      out.printCode("/* BinaryOperator: "+ op + "*/");
+      out.printCode("/* BinaryOperator: "+ op + " */");
     }
     else{
       op = "No such operator"; //safe checker, should not reach here
