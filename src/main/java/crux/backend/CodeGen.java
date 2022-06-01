@@ -226,20 +226,17 @@ public final class CodeGen extends InstVisitor {
     if(op.equals("Add") || op.equals("Sub") || op.equals("Mul") || op.equals("Div")){
       if(op.equals("Add")){
         out.printCode("movq "+ left + "(%rbp), %r10");
-        out.printCode("movq "+ right + "(%rbp), %r11");
-        out.printCode("addq %r11, %r10");
+        out.printCode("addq "+ right + "(%rbp), %r10");
         out.printCode("movq %r10, "+ dst + "(%rbp)");
       }
       else if(op.equals("Sub")){
         out.printCode("movq "+ left + "(%rbp), %r10");
-        out.printCode("movq "+ right + "(%rbp), %r11");
-        out.printCode("subq %r11, %r10");
+        out.printCode("subq "+ right + "(%rbp), %r10");
         out.printCode("movq %r10, "+ dst + "(%rbp)");
       }
       else if(op.equals("Mul")){
         out.printCode("movq "+ left + "(%rbp), %r10");
-        out.printCode("movq "+ right + "(%rbp), %r11");
-        out.printCode("mulq %r11, %r10");
+        out.printCode("mulq "+ right + "(%rbp), %r10");
         out.printCode("movq %r10, "+ dst + "(%rbp)");
       }
       else if(op.equals("Div")){
