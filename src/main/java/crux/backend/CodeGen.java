@@ -215,16 +215,16 @@ public final class CodeGen extends InstVisitor {
 
     if(op.equals("Add") || op.equals("Sub") || op.equals("Mul") || op.equals("Div")){
       if(op.equals("Add")){
-        out.printCode("add %r11, %r10");
+        out.printCode("addq %r11, %r10");
       }
       else if(op.equals("Sub")){
-        out.printCode("sub %r11, %r10");
+        out.printCode("subq %r11, %r10");
       }
       else if(op.equals("Mul")){
-        out.printCode("imul %r11, %r10");
+        out.printCode("mulq %r11, %r10");
       }
       else if(op.equals("Div")){
-        out.printCode("idiv %r11, %r10");
+        out.printCode("divq %r11, %r10");
       }
     }
 
@@ -462,7 +462,7 @@ public final class CodeGen extends InstVisitor {
       int pos = 0;
 
       if(varIndexMap.containsKey(param)){
-        varIndexMap.put(param, numLocalVar++);
+        varIndexMap.put(param, numLocalVar++); //TODO may some error here !!!
         pos = varIndexMap.get(param);
       }
       else{
