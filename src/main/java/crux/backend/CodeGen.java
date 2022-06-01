@@ -149,11 +149,11 @@ public final class CodeGen extends InstVisitor {
     int offset = getPositionRBP(i.getOffset());
     if(i.getOffset() == null){
       out.printCode("movq " + src.getName() + "@GOTPCREL(%rip), %r11"); //
-      out.printCode("movq %r11, " + dst + " (%rbp)");
+      out.printCode("movq %r11, " + dst + "(%rbp)");
     }
     else{
       out.printCode("movq " + offset + "(%rbp), %r11");
-      out.printCode("imulq $8, %r10");
+      out.printCode("imulq $8, %r11");
       out.printCode("movq " + src.getName() + "@GOTPCREL(%rip), %r10"); //
       out.printCode("addq %r10, %r11");
       out.printCode("movq %r11, " + dst + "(%rbp)");
