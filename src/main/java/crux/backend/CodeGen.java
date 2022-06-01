@@ -74,6 +74,17 @@ public final class CodeGen extends InstVisitor {
 
   private void genCode(Function f, int count[]){
     //TODO
+    /**
+     * Generate Body
+     **/
+    numslots = f.getNumTempVars() + f.getNumTempAddressVars();
+    if(numslots % 2 != 0){
+      numslots++;           //if uneven
+    }
+    out.printCode(".globl " + f.getName());
+    out.printLabel(f.getName() + ":");
+    out.printCode("enter $(8 * " + numslots + "), $0");
+
     myLableMap = f.assignLabels(count);
     List<LocalVar> myArgs = f.getArguments();
     numslots = 0;
@@ -99,16 +110,7 @@ public final class CodeGen extends InstVisitor {
       argIndex++;
     }
 
-    /**
-     * Generate Body
-     **/
-    numslots = f.getNumTempVars() + f.getNumTempAddressVars();
-    if(numslots % 2 != 0){
-      numslots++;           //if uneven
-    }
-    out.printCode(".globl " + f.getName());
-    out.printLabel(f.getName() + ":");
-    out.printCode("enter $(8 * " + numslots + "), $0");
+
 
     Stack<Instruction> tovisited = new Stack<>();
     HashSet<Instruction> discovered = new HashSet<>();
