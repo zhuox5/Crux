@@ -159,9 +159,8 @@ public final class CodeGen extends InstVisitor {
       varIndexMap.put(i.getOffset(), numLocalVar);
       numLocalVar++;
       offset = numLocalVar;
-
     }
-    dst *= -8;
+    offset *= -8;
 
     if(i.getOffset() == null){
       out.printCode("movq " + src.getName() + "@GOTPCREL(%rip), %r11"); //
