@@ -221,10 +221,10 @@ public final class CodeGen extends InstVisitor {
         out.printCode("subq %r11, %r10");
       }
       else if(op.equals("Mul")){
-        out.printCode("mulq %r11, %r10");
+        out.printCode("imulq %r11, %r10");
       }
       else if(op.equals("Div")){
-        out.printCode("divq %r11, %r10");
+        out.printCode("idivq %r11, %r10");
       }
     }
 
