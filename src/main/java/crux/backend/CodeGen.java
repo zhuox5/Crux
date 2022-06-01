@@ -39,7 +39,6 @@ public final class CodeGen extends InstVisitor {
    * It should allocate space for globals call genCode for each Function
    */
   public void genCode() {
-    //TODO
     for(Iterator<GlobalDecl> glob_it = p.getGlobals(); glob_it.hasNext(); ){
       GlobalDecl g = glob_it.next();
       String name = g.getSymbol().getName();
@@ -80,10 +79,9 @@ public final class CodeGen extends InstVisitor {
       } else if (argIndex == 6) {
         out.printCode("movq %r9, -48(%rbp)");
       } else {
-        int overflow = (argIndex-3) * 8;
+        int overflow = (argIndex - 3) * 8;
         out.printCode("movq " + overflow + "(%rbp), %r10");
         out.printCode("movq %r10, " + argIndex * (-8) + "(%rbp)");
-        //TODO
       }
       argIndex++;
     }
@@ -124,11 +122,6 @@ public final class CodeGen extends InstVisitor {
             out.printCode("jmp " + myLableMap.get(first));
           }
         }
-        //else if (f.getName().equals("main")) {
-        //  out.printCode("movq $0, %rax");
-        //  out.printCode("leave");
-        //  out.printCode("ret");
-        //}
         else{
           out.printCode("leave");
           out.printCode("ret");
@@ -221,7 +214,6 @@ public final class CodeGen extends InstVisitor {
       varIndexMap.put(i.getDst(), numLocalVar);
       numLocalVar++;
       dst = numLocalVar;
-      //out.printCode("FUCK --- " + dst);
     }
     dst *= -8;
 
@@ -241,7 +233,7 @@ public final class CodeGen extends InstVisitor {
         out.printCode("imulq "+ right + "(%rbp), %r10");
         out.printCode("movq %r10, "+ dst + "(%rbp)");
       }
-      else if(op.equals("Div")){
+      else{
         out.printCode("movq " + left + "(%rbp), %rax");
         out.printCode("cqto");
         out.printCode("idivq " + right + "(%rbp)");
@@ -322,14 +314,12 @@ public final class CodeGen extends InstVisitor {
 
     if(varIndexMap.containsKey(i.getDstVar())){
       dst = varIndexMap.get(i.getDstVar());
-      //out.printCode("FUCK  ----- 1");
     }
     else{
       varIndexMap.put(i.getDstVar(), numLocalVar);
-      //dst = ++numLocalVar;
+      dst = ++numLocalVar;
       //numLocalVar++;
-      dst = numLocalVar;
-      //out.printCode("FUCK  ----- 2 --- " + dst );
+      //dst = numLocalVar;
     }
     dst *= -8;
     if(srcval instanceof IntegerConstant){
