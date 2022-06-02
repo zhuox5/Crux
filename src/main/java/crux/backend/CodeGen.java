@@ -106,7 +106,7 @@ public final class CodeGen extends InstVisitor {
         out.printCode("movq %r9, " + n + "(%rbp)");
       } else {
         int overflow = (argIndex - 7) * (8);
-        out.printCode("movq " + overflow + "(%rsp), %r10");
+        out.printCode("movq " + overflow + "(%rbp), %r10");
         out.printCode("movq %r10, " + argIndex * (-8) + "(%rbp)");
       }
       argIndex++;
@@ -327,13 +327,15 @@ public final class CodeGen extends InstVisitor {
       }
     }
 
-    if(i.getParams().size() > 6){
+    if(i.getParams().size() >= 6){
       int counter = 0;
-      for (int index = 6; index < i.getParams().size(); index++, counter++){
+      for (int index = i.getParams().size()-1; index >= 6; index--, counter++){
         var par = i.getParams().get(index);
         int stackPos = getPositionRBP(par);
+        out.printCode("subq $8, %rsp");
         out.printCode("movq " + stackPos + "(%rbp), %r10");
-        out.printCode("movq %r10, "+ (counter)*(8)+ "(%rsp)");
+        //out.printCode("movq %r10, "+ (counter)*(8)+ "(%rbp)");
+        out.printCode("move %r10, 0(%rsp)");
       }
     }
 
