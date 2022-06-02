@@ -105,7 +105,7 @@ public final class CodeGen extends InstVisitor {
       } else if (argIndex == 6) {
         out.printCode("movq %r9, " + n + "(%rbp)");
       } else {
-        int overflow = (argIndex - 7) * (8);
+        int overflow = (argIndex - 7 + 1) * (8);
         out.printCode("movq " + overflow + "(%rbp), %r10");
         out.printCode("movq %r10, " + argIndex * (-8) + "(%rbp)");
       }
