@@ -103,8 +103,8 @@ public final class CodeGen extends InstVisitor {
       } else if (argIndex == 6) {
         out.printCode("movq %r9, " + n + "(%rbp)");
       } else {
-        int overflow = (argIndex - 3) * -8;
-        out.printCode("movq " + overflow + "(%rbp), %r10");
+        int overflow = (argIndex - 6) * -8;
+        out.printCode("movq " + overflow + "(%rsp), %r10");
         out.printCode("movq %r10, " + argIndex * (-8) + "(%rbp)");
       }
       argIndex++;
@@ -325,7 +325,6 @@ public final class CodeGen extends InstVisitor {
         }
       }
     }
-
 
     if(i.getParams().size() > 6){
       int counter = 1;
