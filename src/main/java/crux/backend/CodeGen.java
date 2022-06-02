@@ -326,9 +326,8 @@ public final class CodeGen extends InstVisitor {
         }
       }
     }
-
+    int counter = 0;
     if(i.getParams().size() >= 6){
-      int counter = 0;
       for (int index = i.getParams().size()-1; index >= 6; index--, counter++){
         var par = i.getParams().get(index);
         int stackPos = getPositionRBP(par);
@@ -341,6 +340,9 @@ public final class CodeGen extends InstVisitor {
 
 
     out.printCode("call " + i.getCallee().getName());
+    if(counter != 0){
+      out.printCode("addq $" + counter * 8 + ", %rsp");
+    }
     if(i.getDst() != null){
       int dst = getPositionRBP(i.getDst());
       out.printCode("movq %rax, " + dst + "(%rbp)");
