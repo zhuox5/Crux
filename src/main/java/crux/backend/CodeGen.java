@@ -103,7 +103,7 @@ public final class CodeGen extends InstVisitor {
       } else if (argIndex == 6) {
         out.printCode("movq %r9, " + n + "(%rbp)");
       } else {
-        int overflow = (argIndex - 3) * 8;
+        int overflow = (argIndex - 3) * -8;
         out.printCode("movq " + overflow + "(%rbp), %r10");
         out.printCode("movq %r10, " + argIndex * (-8) + "(%rbp)");
       }
@@ -334,7 +334,7 @@ public final class CodeGen extends InstVisitor {
         //out.printCode("movq " + stackPos + "(%rbp), %r10");
         out.printCode("movq " + (index+1)*(-8) + "(%rbp), %r10");
         //out.printCode("movq %r10, " + (numLocalVar)*(-8) + "(%rbp)"); //modified here
-        out.printCode("movq %r10, %rsp");
+        out.printCode("movq %r10, "+ (index+1)*(-8)+ "(%rsp)");
       }
     }
     out.printCode("call " + i.getCallee().getName());
