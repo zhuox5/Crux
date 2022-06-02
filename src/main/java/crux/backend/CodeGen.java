@@ -302,41 +302,42 @@ public final class CodeGen extends InstVisitor {
   public void visit(CallInst i) {
     printInstructionInfor(i);
     for(int j=0; j<i.getParams().size(); j++){
-      Variable param = i.getParams().get(j);
-      int pos = getPositionRBP(param);
-      if(j==0){
-        out.printCode("movq " + pos + "(%rbp), %rdi");
-      }
-      else if(j==1){
-        out.printCode("movq " + pos + "(%rbp), %rsi");
-      }
-      else if(j==2){
-        out.printCode("movq " + pos + "(%rbp), %rdx");
-      }
-      else if(j==3){
-        out.printCode("movq " + pos + "(%rbp), %rcx");
-      }
-      else if(j==4){
-        out.printCode("movq " + pos + "(%rbp), %r8");
-      }
-      else if(j==5){
-        out.printCode("movq " + pos + "(%rbp), %r9");
-      }
-      else{
-        // out.printCode("Overflow"), will not reach this line
+      if(j < 6){
+        Variable param = i.getParams().get(j);
+        int pos = getPositionRBP(param);
+        if(j==0){
+          out.printCode("movq " + pos + "(%rbp), %rdi");
+        }
+        else if(j==1){
+          out.printCode("movq " + pos + "(%rbp), %rsi");
+        }
+        else if(j==2){
+          out.printCode("movq " + pos + "(%rbp), %rdx");
+        }
+        else if(j==3){
+          out.printCode("movq " + pos + "(%rbp), %rcx");
+        }
+        else if(j==4){
+          out.printCode("movq " + pos + "(%rbp), %r8");
+        }
+        else{
+          out.printCode("movq " + pos + "(%rbp), %r9");
+        }
       }
     }
 
-    if (i.getParams().size() > 6){
-      for (int index = i.getParams().size() - 1; index > 5; index--){
+
+    if(i.getParams().size() > 6){
+      int counter = 1;
+      for (int index = 6; index < i.getParams().size(); index++, counter++){
         var par = i.getParams().get(index);
         int stackPos = getPositionRBP(par);
-        //out.printCode("movq " + stackPos + "(%rbp), %r10");
-        out.printCode("movq " + (index+1)*(-8) + "(%rbp), %r10");
-        //out.printCode("movq %r10, " + (numLocalVar)*(-8) + "(%rbp)"); //modified here
-        out.printCode("movq %r10, "+ (index+1)*(-8)+ "(%rsp)");
+        out.printCode("movq " + stackPos + "(%rbp), %r10");
+        out.printCode("movq %r10, "+ (counter)*(-8)+ "(%rsp)");
       }
     }
+
+
     out.printCode("call " + i.getCallee().getName());
     if(i.getDst() != null){
       int dst = getPositionRBP(i.getDst());
