@@ -334,7 +334,7 @@ public final class CodeGen extends InstVisitor {
         out.printCode("subq $8, %rsp");
         out.printCode("movq " + stackPos + "(%rbp), %r10");
         //out.printCode("movq %r10, "+ (counter)*(8)+ "(%rbp)");
-        out.printCode("move %r10, 0(%rsp)");
+        out.printCode("movq %r10, 0(%rsp)");
       }
     }
 
