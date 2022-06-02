@@ -231,10 +231,8 @@ public final class CodeGen extends InstVisitor {
     else if(i.getPredicate() == CompareInst.Predicate.NE){
       out.printCode("cmovne %r10, %rax");
     }
-
     int dst = getPositionRBP(i.getDst());
     out.printCode("movq %rax, " + dst + "(%rbp)");
-
   }
 
   public void visit(CopyInst i) {
@@ -306,7 +304,6 @@ public final class CodeGen extends InstVisitor {
     for(int j=0; j<i.getParams().size(); j++){
       Variable param = i.getParams().get(j);
       int pos = getPositionRBP(param);
-      //out.printCode("------------------------");
       if(j==0){
         out.printCode("movq " + pos + "(%rbp), %rdi");
       }
@@ -334,8 +331,10 @@ public final class CodeGen extends InstVisitor {
       for (int index = i.getParams().size() - 1; index > 5; index--){
         var par = i.getParams().get(index);
         int stackPos = getPositionRBP(par);
-        out.printCode("movq " + stackPos + "(%rbp), %r10");
-        out.printCode("movq %r10, " + (numLocalVar)*(-8) + "(%rbp)"); //modified here
+        //out.printCode("movq " + stackPos + "(%rbp), %r10");
+        out.printCode("movq " + (index+1)*(-8) + "(%rbp), %r10");
+        //out.printCode("movq %r10, " + (numLocalVar)*(-8) + "(%rbp)"); //modified here
+        out.printCode("movq %r10, %rsp");
       }
     }
     out.printCode("call " + i.getCallee().getName());
