@@ -76,6 +76,8 @@ public final class CodeGen extends InstVisitor {
     /**
      * Generate Body
      **/
+    varIndexMap = new HashMap<>();
+    numLocalVar = 1;
     numslots = f.getNumTempVars() + f.getNumTempAddressVars();
     if(numslots % 2 != 0){
       numslots++;           //if uneven
@@ -88,7 +90,7 @@ public final class CodeGen extends InstVisitor {
     List<LocalVar> myArgs = f.getArguments();
 
     int argIndex = 1;
-    for (LocalVar myLocalVar : myArgs) {
+    for (var myLocalVar : myArgs) {
       int n = getPositionRBP(myLocalVar);
       if (argIndex == 1) {
         out.printCode("movq %rdi, " + n + "(%rbp)");
@@ -275,7 +277,6 @@ public final class CodeGen extends InstVisitor {
     out.printCode("movq " + src + "(%rbp), %r10");
     out.printCode("movq (%r10), %r11");
     out.printCode("movq %r11, " + dst + "(%rbp)");
-
   }
 
   public void visit(NopInst i) {
@@ -303,7 +304,7 @@ public final class CodeGen extends InstVisitor {
     printInstructionInfor(i);
     for(int j=0; j<i.getParams().size(); j++){
       if(j < 6){
-        Variable param = i.getParams().get(j);
+        var param = i.getParams().get(j);
         int pos = getPositionRBP(param);
         if(j==0){
           out.printCode("movq " + pos + "(%rbp), %rdi");
