@@ -1,0 +1,13 @@
+Crux Program has no type errors.
+
+blt(int a, int b) {
+  return /*bool*/ (/*int*/ a < /*int*/ b);
+}
+main() {
+  printBool(blt(/*int*/ 1, /*int*/ 2));
+  println();
+  printBool(blt(/*int*/ 2, /*int*/ 1));
+  println();
+  printBool(blt(/*int*/ 1, /*int*/ 1));
+}
+

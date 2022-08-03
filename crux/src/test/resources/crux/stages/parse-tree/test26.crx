@@ -1,0 +1,12 @@
+// test loop
+
+int a;
+
+void main() {
+  for(a = 9; a > 0; a = a - 1) {
+    printInt(a);
+    println();
+  }
+  printInt(0-5);
+  printInt(a);
+}

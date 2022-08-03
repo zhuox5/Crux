@@ -1,0 +1,17 @@
+// non-recursive fib
+
+void main() {
+  int i;
+  int a;
+  int b;
+  a = 0;
+  b = 1;
+  for(i = 0; i < 10; i = i + 1) {
+    printInt(b);
+    println();
+    int c;
+    c = a + b;
+    a = b;
+    b = c;
+  }
+}

@@ -1,0 +1,22 @@
+
+myTrue() {
+  printInt(1);
+  println();
+  return true;
+}
+myFalse() {
+  printInt(0);
+  println();
+  return false;
+}
+main() {
+  printBool((myTrue() || myTrue()));
+  println();
+  printBool((myFalse() || myTrue()));
+  println();
+  printBool((myTrue() || myFalse()));
+  println();
+  printBool((myFalse() || myFalse()));
+  println();
+}
+

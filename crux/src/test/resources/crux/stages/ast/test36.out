@@ -1,0 +1,8 @@
+
+main() {
+  i;
+  for(i = 0;(i < 11);i = (i + 1)) {
+    printChar(readChar());
+  }
+}
+

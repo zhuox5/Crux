@@ -1,0 +1,32 @@
+Crux Program has no type errors.
+
+array[14,int] a;
+bubblesort() {
+  bool swapped;
+  for(/*bool*/ swapped = /*bool*/ true;/*bool*/ swapped;/*bool*/ swapped = /*bool*/ swapped) {
+    int i;
+    /*bool*/ swapped = /*bool*/ false;
+    for(/*int*/ i = /*int*/ 0;/*bool*/ (/*int*/ i < /*int*/ 13);/*int*/ i = /*int*/ (/*int*/ i + /*int*/ 1)) {
+      if (/*bool*/ (/*int*/ (/*array[14,int]*/ a)[/*int*/ i] > /*int*/ (/*array[14,int]*/ a)[/*int*/ (/*int*/ i + /*int*/ 1)])) {
+        int tmp;
+        /*int*/ tmp = /*int*/ (/*array[14,int]*/ a)[/*int*/ i];
+        /*int*/ (/*array[14,int]*/ a)[/*int*/ i] = /*int*/ (/*array[14,int]*/ a)[/*int*/ (/*int*/ i + /*int*/ 1)];
+        /*int*/ (/*array[14,int]*/ a)[/*int*/ (/*int*/ i + /*int*/ 1)] = /*int*/ tmp;
+        /*bool*/ swapped = /*bool*/ true;
+      } else {
+      }
+    }
+  }
+}
+main() {
+  int i;
+  for(/*int*/ i = /*int*/ 0;/*bool*/ (/*int*/ i < /*int*/ 14);/*int*/ i = /*int*/ (/*int*/ i + /*int*/ 1)) {
+    /*int*/ (/*array[14,int]*/ a)[/*int*/ i] = /*int*/ (/*int*/ 14 - /*int*/ i);
+  }
+  bubblesort();
+  for(/*int*/ i = /*int*/ 0;/*bool*/ (/*int*/ i < /*int*/ 14);/*int*/ i = /*int*/ (/*int*/ i + /*int*/ 1)) {
+    printInt(/*int*/ (/*array[14,int]*/ a)[/*int*/ i]);
+    println();
+  }
+}
+

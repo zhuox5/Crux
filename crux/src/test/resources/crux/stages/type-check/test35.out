@@ -1,0 +1,28 @@
+Crux Program has no type errors.
+
+myPrintZero() {
+  printInt(/*int*/ 0);
+}
+myPrintOne(int a) {
+  printInt(/*int*/ a);
+}
+myPrintTwo(int a, int b) {
+  printInt(/*int*/ a);
+  printInt(/*int*/ b);
+}
+myPrintThree(int a, int b, int c) {
+  printInt(/*int*/ a);
+  printInt(/*int*/ b);
+  printInt(/*int*/ c);
+}
+main() {
+  myPrintZero();
+  println();
+  myPrintOne(/*int*/ 1);
+  println();
+  myPrintTwo(/*int*/ 1, /*int*/ 2);
+  println();
+  myPrintThree(/*int*/ 1, /*int*/ 2, /*int*/ 3);
+  println();
+}
+

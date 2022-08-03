@@ -1,0 +1,8 @@
+
+main() {
+  printInt(7);
+  printBool(true);
+  println();
+  readInt();
+}
+

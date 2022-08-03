@@ -1,0 +1,23 @@
+Crux Program has no type errors.
+
+myTrue() {
+  printInt(/*int*/ 1);
+  println();
+  return /*bool*/ true;
+}
+myFalse() {
+  printInt(/*int*/ 0);
+  println();
+  return /*bool*/ false;
+}
+main() {
+  printBool(/*bool*/ (myTrue() || myTrue()));
+  println();
+  printBool(/*bool*/ (myFalse() || myTrue()));
+  println();
+  printBool(/*bool*/ (myTrue() || myFalse()));
+  println();
+  printBool(/*bool*/ (myFalse() || myFalse()));
+  println();
+}
+

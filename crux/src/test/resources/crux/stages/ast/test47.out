@@ -1,0 +1,30 @@
+
+a;
+main() {
+  a = 1;
+  if (true) {
+    a;
+    a = 2;
+    if (true) {
+      a = (a * 10);
+      a;
+      a = 3;
+      if (true) {
+        a;
+        a = true;
+        printBool(a);
+        println();
+      } else {
+      }
+      printInt(a);
+      println();
+    } else {
+    }
+    printInt(a);
+    println();
+  } else {
+  }
+  printInt(a);
+  println();
+}
+

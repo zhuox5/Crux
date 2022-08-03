@@ -1,0 +1,31 @@
+
+a;
+bubblesort() {
+  swapped;
+  for(swapped = true;swapped;swapped = swapped) {
+    i;
+    swapped = false;
+    for(i = 0;(i < 13);i = (i + 1)) {
+      if ((a[i] > a[(i + 1)])) {
+        tmp;
+        tmp = a[i];
+        a[i] = a[(i + 1)];
+        a[(i + 1)] = tmp;
+        swapped = true;
+      } else {
+      }
+    }
+  }
+}
+main() {
+  i;
+  for(i = 0;(i < 14);i = (i + 1)) {
+    a[i] = (14 - i);
+  }
+  bubblesort();
+  for(i = 0;(i < 14);i = (i + 1)) {
+    printInt(a[i]);
+    println();
+  }
+}
+

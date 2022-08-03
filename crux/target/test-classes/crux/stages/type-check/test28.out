@@ -1,0 +1,15 @@
+Crux Program has no type errors.
+
+myInt(int a) {
+  printInt(/*int*/ a);
+  return /*int*/ a;
+}
+myPrint() {
+  myInt(/*int*/ 7);
+  myInt(/*int*/ 8);
+  myInt(/*int*/ 9);
+}
+main() {
+  myPrint();
+}
+

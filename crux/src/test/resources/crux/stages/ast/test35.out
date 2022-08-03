@@ -1,0 +1,27 @@
+
+myPrintZero() {
+  printInt(0);
+}
+myPrintOne(a) {
+  printInt(a);
+}
+myPrintTwo(a, b) {
+  printInt(a);
+  printInt(b);
+}
+myPrintThree(a, b, c) {
+  printInt(a);
+  printInt(b);
+  printInt(c);
+}
+main() {
+  myPrintZero();
+  println();
+  myPrintOne(1);
+  println();
+  myPrintTwo(1, 2);
+  println();
+  myPrintThree(1, 2, 3);
+  println();
+}
+

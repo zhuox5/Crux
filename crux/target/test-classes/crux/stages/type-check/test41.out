@@ -1,0 +1,17 @@
+Crux Program has no type errors.
+
+int a;
+array[1,int] b;
+foo() {
+  return /*bool*/ false;
+}
+main() {
+  /*int*/ a = /*int*/ 0;
+  /*int*/ (/*array[1,int]*/ b)[/*int*/ 0] = /*int*/ 1;
+  bool c;
+  if (/*bool*/ true) {
+    /*bool*/ c = /*bool*/ (/*bool*/ (/*int*/ 1 > /*int*/ (/*int*/ (/*array[1,int]*/ b)[/*int*/ 0] - /*int*/ a)) || /*bool*/ (foo() || /*bool*/ true));
+  } else {
+  }
+}
+

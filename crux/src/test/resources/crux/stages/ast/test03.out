@@ -1,0 +1,6 @@
+
+main() {
+  printBool(true);
+  printBool(false);
+}
+

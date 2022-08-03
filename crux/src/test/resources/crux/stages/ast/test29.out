@@ -1,0 +1,12 @@
+
+blt(a, b) {
+  return (a < b);
+}
+main() {
+  printBool(blt(1, 2));
+  println();
+  printBool(blt(2, 1));
+  println();
+  printBool(blt(1, 1));
+}
+

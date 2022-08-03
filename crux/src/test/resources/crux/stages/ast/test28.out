@@ -1,0 +1,14 @@
+
+myInt(a) {
+  printInt(a);
+  return a;
+}
+myPrint() {
+  myInt(7);
+  myInt(8);
+  myInt(9);
+}
+main() {
+  myPrint();
+}
+

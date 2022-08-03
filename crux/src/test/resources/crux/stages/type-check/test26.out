@@ -1,0 +1,12 @@
+Crux Program has no type errors.
+
+int a;
+main() {
+  for(/*int*/ a = /*int*/ 9;/*bool*/ (/*int*/ a > /*int*/ 0);/*int*/ a = /*int*/ (/*int*/ a - /*int*/ 1)) {
+    printInt(/*int*/ a);
+    println();
+  }
+  printInt(/*int*/ (/*int*/ 0 - /*int*/ 5));
+  printInt(/*int*/ a);
+}
+

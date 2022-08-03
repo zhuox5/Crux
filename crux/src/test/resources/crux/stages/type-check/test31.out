@@ -1,0 +1,26 @@
+Crux Program has no type errors.
+
+int a;
+shadowWithParam(int a) {
+  /*int*/ a = /*int*/ 7;
+  printInt(/*int*/ a);
+  println();
+}
+shadowWithLocal() {
+  int a;
+  /*int*/ a = /*int*/ 9;
+  printInt(/*int*/ a);
+  println();
+}
+main() {
+  /*int*/ a = /*int*/ 5;
+  printInt(/*int*/ a);
+  println();
+  shadowWithParam(/*int*/ 8);
+  printInt(/*int*/ a);
+  println();
+  shadowWithLocal();
+  printInt(/*int*/ a);
+  println();
+}
+

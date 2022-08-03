@@ -1,0 +1,13 @@
+
+rec(a) {
+  if ((a > 0)) {
+    rec((a - 1));
+  } else {
+  }
+  printInt(a);
+  println();
+}
+main() {
+  rec(5);
+}
+

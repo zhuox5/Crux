@@ -1,0 +1,6 @@
+Crux Program has no type errors.
+
+main() {
+  printInt(/*int*/ (/*int*/ 1 + /*int*/ 1));
+}
+

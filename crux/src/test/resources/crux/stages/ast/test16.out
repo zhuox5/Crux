@@ -1,0 +1,9 @@
+
+a;
+main() {
+  a = 1;
+  a;
+  a = 2;
+  printInt(a);
+}
+
