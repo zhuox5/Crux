@@ -1,0 +1,11 @@
+Crux Program has no type errors.
+
+main() {
+  int five;
+  int sum;
+  /*int*/ five = /*int*/ (/*int*/ 100 - /*int*/ 600);
+  /*int*/ sum = /*int*/ (/*int*/ five / /*int*/ 100);
+  printInt(/*int*/ sum);
+  println();
+}
+

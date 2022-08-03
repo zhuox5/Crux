@@ -1,0 +1,14 @@
+Crux Program has no type errors.
+
+rec(int a) {
+  if (/*bool*/ (/*int*/ a > /*int*/ 0)) {
+    rec(/*int*/ (/*int*/ a - /*int*/ 1));
+  } else {
+  }
+  printInt(/*int*/ a);
+  println();
+}
+main() {
+  rec(/*int*/ 5);
+}
+

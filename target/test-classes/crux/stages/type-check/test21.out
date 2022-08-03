@@ -1,0 +1,11 @@
+Crux Program has no type errors.
+
+main() {
+  printChar(/*int*/ 72);
+  printChar(/*int*/ 101);
+  printChar(/*int*/ 108);
+  printChar(/*int*/ 108);
+  printChar(/*int*/ 111);
+  println();
+}
+

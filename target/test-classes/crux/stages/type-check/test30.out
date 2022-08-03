@@ -1,0 +1,18 @@
+Crux Program has no type errors.
+
+int canary_begin;
+array[3,int] x;
+int canary_end;
+main() {
+  /*int*/ canary_begin = /*int*/ 0;
+  /*int*/ canary_end = /*int*/ 0;
+  /*int*/ (/*array[3,int]*/ x)[/*int*/ 0] = /*int*/ 222;
+  /*int*/ (/*array[3,int]*/ x)[/*int*/ 1] = /*int*/ 333;
+  /*int*/ (/*array[3,int]*/ x)[/*int*/ 2] = /*int*/ 444;
+  printInt(/*int*/ canary_begin);
+  printInt(/*int*/ (/*array[3,int]*/ x)[/*int*/ 0]);
+  printInt(/*int*/ (/*array[3,int]*/ x)[/*int*/ 1]);
+  printInt(/*int*/ (/*array[3,int]*/ x)[/*int*/ 2]);
+  printInt(/*int*/ canary_end);
+}
+

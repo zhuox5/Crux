@@ -1,0 +1,25 @@
+Crux Program has no type errors.
+
+array[5,int] x;
+main() {
+  int canary_begin;
+  int canary_end;
+  int outer;
+  int inner;
+  /*int*/ canary_begin = /*int*/ 0;
+  /*int*/ canary_end = /*int*/ 0;
+  for(/*int*/ outer = /*int*/ 4;/*bool*/ (/*int*/ outer >= /*int*/ 0);/*int*/ outer = /*int*/ (/*int*/ outer - /*int*/ 1)) {
+    for(/*int*/ inner = /*int*/ 2;/*bool*/ (/*int*/ inner >= /*int*/ 0);/*int*/ inner = /*int*/ (/*int*/ inner - /*int*/ 1)) {
+      /*int*/ (/*array[5,int]*/ x)[/*int*/ outer] = /*int*/ (/*int*/ (/*int*/ (/*int*/ inner * /*int*/ 1000) + /*int*/ (/*int*/ outer * /*int*/ 100)) + /*int*/ 99);
+    }
+  }
+  for(/*int*/ outer = /*int*/ 0;/*bool*/ (/*int*/ outer < /*int*/ 5);/*int*/ outer = /*int*/ (/*int*/ outer + /*int*/ 1)) {
+    for(/*int*/ inner = /*int*/ 0;/*bool*/ (/*int*/ inner < /*int*/ 3);/*int*/ inner = /*int*/ (/*int*/ inner + /*int*/ 1)) {
+      printInt(/*int*/ (/*array[5,int]*/ x)[/*int*/ outer]);
+    }
+    println();
+  }
+  printInt(/*int*/ canary_begin);
+  printInt(/*int*/ canary_end);
+}
+

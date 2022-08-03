@@ -1,0 +1,239 @@
+-------------------------------------------------------------------------------
+Test set: crux.CompilerStageTests
+-------------------------------------------------------------------------------
+Tests run: 50, Failures: 2, Errors: 38, Skipped: 0, Time elapsed: 0.741 s <<< FAILURE! - in crux.CompilerStageTests
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.004 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.003 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.004 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.004 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.004 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.003 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.014 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.011 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.006 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.004 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.005 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.004 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.003 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.007 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.014 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.006 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: IR for program crux/stages/ir/test25.crx differs from expected output. ==> expected: <0-1> but was: <>
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:229)
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.008 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.005 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.003 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.004 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.003 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.003 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.005 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.005 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.007 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.003 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.003 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.01 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: 
+IR for program crux/stages/ir/test38.crx differs from expected output. ==> expected: <true
+true
+true
+false
+true
+false
+true
+false
+true
+true
+true
+false
+false
+false
+true
+true
+true
+true
+true> but was: <null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null
+null>
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:229)
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.005 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.004 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.004 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.004 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.ClassCastException: class crux.ast.ArrayAccess cannot be cast to class crux.ast.VarAccess (crux.ast.ArrayAccess and crux.ast.VarAccess are in unnamed module of loader 'app')
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.007 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.004 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.004 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.006 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.005 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.003 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.004 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+
+crux.CompilerStageTests.emulateIR  Time elapsed: 0.005 s  <<< ERROR!
+java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at crux.CompilerStageTests.lambda$emulateIR$7(CompilerStageTests.java:222)
+Caused by: java.lang.NullPointerException
+

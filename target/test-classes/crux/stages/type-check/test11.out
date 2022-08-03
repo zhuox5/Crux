@@ -1,0 +1,9 @@
+Crux Program has no type errors.
+
+main() {
+  printInt(/*int*/ 7);
+  printBool(/*bool*/ true);
+  println();
+  readInt();
+}
+

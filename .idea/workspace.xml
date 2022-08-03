@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7b3e6dd2-4871-494e-8bfe-d055734d4cdb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/crux/backend/CodeGen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/crux/backend/CodeGen.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="277Kx7fCESojLNH7xNft3mRrlEq" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
+  </component>
+  <component name="RunManager" selected="Application.Compiler">
+    <configuration name="Compiler" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="crux.Compiler" />
+      <module name="crux" />
+      <option name="PROGRAM_PARAMETERS" value="--read-ir src/test/resources/crux/stages/codegen/test38.ser " />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="crux.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CompilerStageTests" type="JUnit" factoryName="JUnit">
+      <useClassPathOnly />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="crux.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="crux" />
+      <option name="MAIN_CLASS_NAME" value="crux.CompilerStageTests" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CompilerStageTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="crux" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="crux.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="crux" />
+      <option name="MAIN_CLASS_NAME" value="crux.CompilerStageTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Compiler" />
+      <item itemvalue="JUnit.CompilerStageTests" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.CompilerStageTests" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7b3e6dd2-4871-494e-8bfe-d055734d4cdb" name="Default Changelist" comment="" />
+      <created>1648665927360</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1648665927360</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.s" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="323" y="25" width="634" height="714" key="#Compiler" timestamp="1651076809006">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="323" y="25" width="634" height="714" key="#Compiler/0.0.1280.800@0.0.1280.800" timestamp="1651076809006" />
+    <state x="214" y="25" width="847" height="712" key="#CompilerStageTests" timestamp="1654025535825">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="214" y="25" width="847" height="712" key="#CompilerStageTests/0.0.1280.800@0.0.1280.800" timestamp="1654025535825" />
+    <state x="216" y="17" key="#CompilerStageTests_(1)" timestamp="1649813309358">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="216" y="17" key="#CompilerStageTests_(1)/0.0.1280.800@0.0.1280.800" timestamp="1649813309358" />
+    <state x="240" y="45" key="#Plugins" timestamp="1648681285077">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="240" y="45" key="#Plugins/0.0.1280.800@0.0.1280.800" timestamp="1648681285077" />
+    <state x="128" y="0" key="#Project_Structure" timestamp="1648667084534">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="128" y="0" key="#Project_Structure/0.0.1280.800@0.0.1280.800" timestamp="1648667084534" />
+    <state x="170" y="72" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1654227285243">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="170" y="72" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.800@0.0.1280.800" timestamp="1654227285243" />
+    <state x="100" y="100" width="1080" height="600" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog" timestamp="1652828653262">
+      <screen x="0" y="25" width="1280" height="713" />
+    </state>
+    <state x="100" y="100" width="1080" height="600" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog/0.0.1280.800@0.0.1280.800" timestamp="1652824099564" />
+    <state x="100" y="100" width="1080" height="600" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog/0.25.1280.713@0.25.1280.713" timestamp="1652828653262" />
+    <state x="366" y="206" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1653623734572">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="366" y="206" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1280.800@0.0.1280.800" timestamp="1653623734572" />
+    <state x="453" y="110" key="#com.intellij.ide.util.MemberChooser" timestamp="1650480046882">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="453" y="110" key="#com.intellij.ide.util.MemberChooser/0.0.1280.800@0.0.1280.800" timestamp="1650480046881" />
+    <state x="338" y="328" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1649123071720">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="338" y="328" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.1280.800@0.0.1280.800" timestamp="1649123071720" />
+    <state x="378" y="151" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1649130194434">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="378" y="151" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1280.800@0.0.1280.800" timestamp="1649130194434" />
+    <state width="1238" height="2" key="GridCell.Tab.0.bottom" timestamp="1654295115134">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="2" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1654295115134" />
+    <state width="1238" height="2" key="GridCell.Tab.0.bottom/0.25.1280.712@0.25.1280.712" timestamp="1654190295014" />
+    <state width="1238" height="76" key="GridCell.Tab.0.bottom/0.25.1280.713@0.25.1280.713" timestamp="1652771048244" />
+    <state width="1238" height="2" key="GridCell.Tab.0.center" timestamp="1654295115133">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="2" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1654295115133" />
+    <state width="1238" height="2" key="GridCell.Tab.0.center/0.25.1280.712@0.25.1280.712" timestamp="1654190295014" />
+    <state width="1238" height="76" key="GridCell.Tab.0.center/0.25.1280.713@0.25.1280.713" timestamp="1652771048243" />
+    <state width="1238" height="2" key="GridCell.Tab.0.left" timestamp="1654295115133">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="2" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1654295115133" />
+    <state width="1238" height="2" key="GridCell.Tab.0.left/0.25.1280.712@0.25.1280.712" timestamp="1654190295013" />
+    <state width="1238" height="76" key="GridCell.Tab.0.left/0.25.1280.713@0.25.1280.713" timestamp="1652771048243" />
+    <state width="1238" height="2" key="GridCell.Tab.0.right" timestamp="1654295115133">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="2" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1654295115133" />
+    <state width="1238" height="2" key="GridCell.Tab.0.right/0.25.1280.712@0.25.1280.712" timestamp="1654190295014" />
+    <state width="1238" height="76" key="GridCell.Tab.0.right/0.25.1280.713@0.25.1280.713" timestamp="1652771048244" />
+    <state width="1238" height="329" key="GridCell.Tab.1.bottom" timestamp="1652762092069">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="329" key="GridCell.Tab.1.bottom/0.0.1280.800@0.0.1280.800" timestamp="1652762092069" />
+    <state width="1238" height="329" key="GridCell.Tab.1.bottom/0.25.1280.713@0.25.1280.713" timestamp="1652737882953" />
+    <state width="1238" height="329" key="GridCell.Tab.1.center" timestamp="1652762092068">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="329" key="GridCell.Tab.1.center/0.0.1280.800@0.0.1280.800" timestamp="1652762092068" />
+    <state width="1238" height="329" key="GridCell.Tab.1.center/0.25.1280.713@0.25.1280.713" timestamp="1652737882952" />
+    <state width="1238" height="329" key="GridCell.Tab.1.left" timestamp="1652762092068">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="329" key="GridCell.Tab.1.left/0.0.1280.800@0.0.1280.800" timestamp="1652762092068" />
+    <state width="1238" height="329" key="GridCell.Tab.1.left/0.25.1280.713@0.25.1280.713" timestamp="1652737882952" />
+    <state width="1238" height="329" key="GridCell.Tab.1.right" timestamp="1652762092068">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="329" key="GridCell.Tab.1.right/0.0.1280.800@0.0.1280.800" timestamp="1652762092068" />
+    <state width="1238" height="329" key="GridCell.Tab.1.right/0.25.1280.713@0.25.1280.713" timestamp="1652737882953" />
+    <state width="1238" height="329" key="GridCell.Tab.2.bottom" timestamp="1652762092070">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="329" key="GridCell.Tab.2.bottom/0.0.1280.800@0.0.1280.800" timestamp="1652762092070" />
+    <state width="1238" height="329" key="GridCell.Tab.2.bottom/0.25.1280.713@0.25.1280.713" timestamp="1652737882955" />
+    <state width="1238" height="329" key="GridCell.Tab.2.center" timestamp="1652762092069">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="329" key="GridCell.Tab.2.center/0.0.1280.800@0.0.1280.800" timestamp="1652762092069" />
+    <state width="1238" height="329" key="GridCell.Tab.2.center/0.25.1280.713@0.25.1280.713" timestamp="1652737882954" />
+    <state width="1238" height="329" key="GridCell.Tab.2.left" timestamp="1652762092069">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="329" key="GridCell.Tab.2.left/0.0.1280.800@0.0.1280.800" timestamp="1652762092069" />
+    <state width="1238" height="329" key="GridCell.Tab.2.left/0.25.1280.713@0.25.1280.713" timestamp="1652737882953" />
+    <state width="1238" height="329" key="GridCell.Tab.2.right" timestamp="1652762092069">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="329" key="GridCell.Tab.2.right/0.0.1280.800@0.0.1280.800" timestamp="1652762092069" />
+    <state width="1238" height="329" key="GridCell.Tab.2.right/0.25.1280.713@0.25.1280.713" timestamp="1652737882954" />
+    <state x="117" y="87" key="Maven.ArtifactSearchDialog" timestamp="1648682441698">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="117" y="87" key="Maven.ArtifactSearchDialog/0.0.1280.800@0.0.1280.800" timestamp="1648682441698" />
+    <state x="305" y="124" width="670" height="676" key="search.everywhere.popup" timestamp="1652818242695">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="305" y="124" width="670" height="676" key="search.everywhere.popup/0.0.1280.800@0.0.1280.800" timestamp="1652818242695" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/crux$Compiler.ic" NAME="Compiler Coverage Results" MODIFIED="1650942554852" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>crux.*</FILTER>
+    </SUITE>
+  </component>
+</project>

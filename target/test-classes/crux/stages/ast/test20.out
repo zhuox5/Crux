@@ -1,0 +1,10 @@
+
+main() {
+  five;
+  sum;
+  five = (100 - 600);
+  sum = (five / 100);
+  printInt(sum);
+  println();
+}
+

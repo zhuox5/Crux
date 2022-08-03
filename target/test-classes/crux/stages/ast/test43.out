@@ -1,0 +1,21 @@
+
+validReturn1(a) {
+  if (true) {
+    if (false) {
+      a = 3;
+    } else {
+      z;
+      for(z = 0;(z < 10);z = (z + 1)) {
+        return a;
+      }
+    }
+    return 4;
+  } else {
+    return a;
+  }
+}
+main() {
+  printInt(3);
+  printInt(validReturn1(6));
+}
+

@@ -112,8 +112,6 @@ public final class CodeGen extends InstVisitor {
       argIndex++;
     }
 
-
-
     Stack<Instruction> tovisited = new Stack<>();
     HashSet<Instruction> discovered = new HashSet<>();
     tovisited.push(f.getStart());
@@ -168,7 +166,6 @@ public final class CodeGen extends InstVisitor {
   public void visit(BinaryOperator i) {
     //printInstructionInfor(i);
     String op = i.getOperator().toString();
-    //out.printCode(op);
     if(op.equals("Add") || op.equals("Sub") || op.equals("Mul") || op.equals("Div")){
       out.printCode("/* BinaryOperator: "+ op + " */");
     }
@@ -337,7 +334,6 @@ public final class CodeGen extends InstVisitor {
         out.printCode("movq %r10, 0(%rsp)");
       }
     }
-
 
     out.printCode("call " + i.getCallee().getName());
     if(counter != 0){

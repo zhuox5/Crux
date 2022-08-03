@@ -1,0 +1,7 @@
+Crux Program has no type errors.
+
+int global;
+array[5,bool] a;
+main() {
+}
+

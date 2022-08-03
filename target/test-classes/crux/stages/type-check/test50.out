@@ -1,0 +1,40 @@
+Crux Program has no type errors.
+
+garble(int in, int in2) {
+  int tmp;
+  /*int*/ tmp = /*int*/ 0;
+  int count;
+  /*int*/ count = /*int*/ 0;
+  for(/*int*/ count = /*int*/ 0;/*bool*/ (!/*bool*/ (/*bool*/ (/*int*/ in == /*int*/ 0) && /*bool*/ (/*int*/ in2 == /*int*/ 0)));/*int*/ count = /*int*/ (/*int*/ count + /*int*/ 1)) {
+    int a;
+    int b;
+    /*int*/ a = /*int*/ (/*int*/ in - /*int*/ (/*int*/ (/*int*/ in / /*int*/ 2) * /*int*/ 2));
+    /*int*/ b = /*int*/ (/*int*/ in2 - /*int*/ (/*int*/ (/*int*/ in2 / /*int*/ 2) * /*int*/ 2));
+    if (/*bool*/ (/*bool*/ (/*int*/ a == /*int*/ 1) && /*bool*/ (/*int*/ b == /*int*/ 0))) {
+      /*int*/ tmp = /*int*/ (/*int*/ (/*int*/ tmp * /*int*/ 2) + /*int*/ 1);
+    } else {
+      if (/*bool*/ (/*bool*/ (/*int*/ a == /*int*/ 0) && /*bool*/ (/*int*/ b == /*int*/ 1))) {
+        /*int*/ tmp = /*int*/ (/*int*/ (/*int*/ tmp * /*int*/ 2) + /*int*/ 1);
+      } else {
+        /*int*/ tmp = /*int*/ (/*int*/ tmp * /*int*/ 2);
+      }
+    }
+    /*int*/ in = /*int*/ (/*int*/ in / /*int*/ 2);
+    /*int*/ in2 = /*int*/ (/*int*/ in2 / /*int*/ 2);
+  }
+  int out;
+  for(/*int*/ out = /*int*/ 0;/*bool*/ (/*int*/ count != /*int*/ 0);/*int*/ count = /*int*/ (/*int*/ count - /*int*/ 1)) {
+    /*int*/ out = /*int*/ (/*int*/ (/*int*/ out * /*int*/ 2) + /*int*/ (/*int*/ tmp - /*int*/ (/*int*/ (/*int*/ tmp / /*int*/ 2) * /*int*/ 2)));
+    /*int*/ tmp = /*int*/ (/*int*/ tmp / /*int*/ 2);
+  }
+  return /*int*/ out;
+}
+main() {
+  int i;
+  for(/*int*/ i = /*int*/ 0;/*bool*/ (/*int*/ i < /*int*/ 40);/*int*/ i = /*int*/ (/*int*/ i + /*int*/ 1)) {
+    int tmp;
+    /*int*/ tmp = readChar();
+    printChar(garble(/*int*/ tmp, /*int*/ (/*int*/ 7 + /*int*/ i)));
+  }
+}
+

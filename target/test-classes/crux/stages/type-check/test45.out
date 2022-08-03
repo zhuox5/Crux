@@ -1,0 +1,26 @@
+Crux Program has no type errors.
+
+paramtest(int a, int b, int c, int d, int e, int f, int g, int h, int i) {
+  printInt(/*int*/ a);
+  println();
+  printInt(/*int*/ b);
+  println();
+  printInt(/*int*/ c);
+  println();
+  printInt(/*int*/ d);
+  println();
+  printInt(/*int*/ e);
+  println();
+  printInt(/*int*/ f);
+  println();
+  printInt(/*int*/ g);
+  println();
+  printInt(/*int*/ h);
+  println();
+  printInt(/*int*/ i);
+  println();
+}
+main() {
+  paramtest(/*int*/ 1, /*int*/ 2, /*int*/ 3, /*int*/ 4, /*int*/ 5, /*int*/ 6, /*int*/ 7, /*int*/ 8, /*int*/ 9);
+}
+

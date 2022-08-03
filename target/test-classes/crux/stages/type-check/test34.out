@@ -1,0 +1,27 @@
+Crux Program has no type errors.
+
+main() {
+  printInt(/*int*/ (/*int*/ (/*int*/ 3 * /*int*/ 5) + /*int*/ 7));
+  println();
+  printInt(/*int*/ (/*int*/ 3 + /*int*/ (/*int*/ 5 * /*int*/ 7)));
+  println();
+  printInt(/*int*/ (/*int*/ (/*int*/ 3 + /*int*/ 5) - /*int*/ 7));
+  println();
+  printInt(/*int*/ (/*int*/ (/*int*/ 3 - /*int*/ 5) + /*int*/ 7));
+  println();
+  printInt(/*int*/ (/*int*/ (/*int*/ 3 / /*int*/ 5) + /*int*/ 7));
+  println();
+  printInt(/*int*/ (/*int*/ (/*int*/ 3 / /*int*/ 5) * /*int*/ 7));
+  println();
+  printInt(/*int*/ (/*int*/ 3 + /*int*/ (/*int*/ 5 / /*int*/ 7)));
+  println();
+  printInt(/*int*/ (/*int*/ (/*int*/ 3 + /*int*/ 5) * /*int*/ 7));
+  println();
+  printInt(/*int*/ (/*int*/ (/*int*/ 3 - /*int*/ 5) + /*int*/ 7));
+  println();
+  printInt(/*int*/ (/*int*/ (/*int*/ 2 * /*int*/ 3) + /*int*/ (/*int*/ 10 / /*int*/ 2)));
+  println();
+  printInt(/*int*/ (/*int*/ (/*int*/ 5 - /*int*/ 3) + /*int*/ 2));
+  println();
+}
+

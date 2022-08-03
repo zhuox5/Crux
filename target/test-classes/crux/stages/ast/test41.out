@@ -1,0 +1,16 @@
+
+a;
+b;
+foo() {
+  return false;
+}
+main() {
+  a = 0;
+  b[0] = 1;
+  c;
+  if (true) {
+    c = ((1 > (b[0] - a)) || (foo() || true));
+  } else {
+  }
+}
+
